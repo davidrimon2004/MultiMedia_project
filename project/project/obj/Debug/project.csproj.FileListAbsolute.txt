@@ -7,3 +7,12 @@ C:\Users\Al-Saad\source\repos\project\project\obj\Debug\project.csproj.GenerateR
 C:\Users\Al-Saad\source\repos\project\project\obj\Debug\project.csproj.CoreCompileInputs.cache
 C:\Users\Al-Saad\source\repos\project\project\obj\Debug\project.exe
 C:\Users\Al-Saad\source\repos\project\project\obj\Debug\project.pdb
+C:\Users\Al-Saad\MultiMedia_project\project\project\bin\Debug\project.exe.config
+C:\Users\Al-Saad\MultiMedia_project\project\project\bin\Debug\project.exe
+C:\Users\Al-Saad\MultiMedia_project\project\project\bin\Debug\project.pdb
+C:\Users\Al-Saad\MultiMedia_project\project\project\obj\Debug\project.csproj.AssemblyReference.cache
+C:\Users\Al-Saad\MultiMedia_project\project\project\obj\Debug\project.Properties.Resources.resources
+C:\Users\Al-Saad\MultiMedia_project\project\project\obj\Debug\project.csproj.GenerateResource.cache
+C:\Users\Al-Saad\MultiMedia_project\project\project\obj\Debug\project.csproj.CoreCompileInputs.cache
+C:\Users\Al-Saad\MultiMedia_project\project\project\obj\Debug\project.exe
+C:\Users\Al-Saad\MultiMedia_project\project\project\obj\Debug\project.pdb
