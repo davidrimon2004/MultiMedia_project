@@ -7,7 +7,7 @@
       "RelativeMoniker": "D:0:0:{E6C341B8-035C-4210-801F-D0692526491E}|project\\project.csproj|solutionrelative:project\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E6C341B8-035C-4210-801F-D0692526491E}|project\\project.csproj|c:\\users\\al-saad\\multimedia_project\\project\\project\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "AbsoluteMoniker": "D:0:0:{E6C341B8-035C-4210-801F-D0692526491E}|project\\project.csproj|C:\\Users\\Al-Saad\\MultiMedia_project\\project\\project\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{E6C341B8-035C-4210-801F-D0692526491E}|project\\project.csproj|solutionrelative:project\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     }
   ],
@@ -28,7 +28,7 @@
               "RelativeDocumentMoniker": "project\\Form1.cs",
               "ToolTip": "C:\\Users\\Al-Saad\\MultiMedia_project\\project\\project\\Form1.cs",
               "RelativeToolTip": "project\\Form1.cs",
-              "ViewState": "AgIAAA8AAAAAAAAAAAAwwCMAAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAACAAAAAAAAAAAAAgwCgAAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-30T20:25:12.163Z",
               "EditorCaption": ""
@@ -42,8 +42,7 @@
               "ToolTip": "C:\\Users\\Al-Saad\\MultiMedia_project\\project\\project\\Form1.cs [Design]",
               "RelativeToolTip": "project\\Form1.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-30T20:25:08.443Z",
-              "EditorCaption": " [Design]"
+              "WhenOpened": "2025-05-30T20:25:08.443Z"
             }
           ]
         }

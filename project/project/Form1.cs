@@ -10,19 +10,54 @@ using System.Windows.Forms;
 
 namespace project
 {
+    public class CAdvImgActor
+    {
+        public Bitmap wrld;
+        public Rectangle rcDst, rcSrc;
+    }
     public partial class Form1 : Form
     {
         Bitmap off;
         Timer tt= new Timer();
+        CAdvImgActor wrld = new CAdvImgActor();
         public Form1()
         {
-            WindowState= FormWindowState.Maximized;
+            //WindowState= FormWindowState.Maximized;
             this.Load += Form1_Load;
             this.Paint += Form1_Paint;
+            this.KeyDown += Form1_KeyDown;
             tt.Interval = 1000 / 60; // 60 FPS
             tt.Start();
             tt.Tick += Tt_Tick;
             InitializeComponent();
+        }
+
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode) //scrolling logic
+            {
+                case Keys.D:
+                    if (wrld.rcSrc.X + wrld.rcSrc.Width <= wrld.wrld.Width)
+                    {
+                        wrld.rcSrc.X += 5;
+                    }
+                    break;
+                case Keys.A:
+                    if (wrld.rcSrc.X >= 0)
+                    {
+                        wrld.rcSrc.X -= 5;
+                    }
+                    break;
+                case Keys.W:
+                    if (wrld.rcSrc.Y >= 0)
+                        wrld.rcSrc.Y -= 5;
+                    break;
+                case Keys.S:
+                    if (wrld.rcSrc.Y + wrld.rcSrc.Height <= wrld.wrld.Height)
+                        wrld.rcSrc.Y += 5;
+                    break;
+            }
+            DrawDubb(this.CreateGraphics());
         }
 
         private void Tt_Tick(object sender, EventArgs e)
