@@ -22,7 +22,7 @@ namespace project
         CAdvImgActor wrld = new CAdvImgActor();
         public Form1()
         {
-            WindowState= FormWindowState.Maximized;
+           // WindowState= FormWindowState.Maximized;
             this.Load += Form1_Load;
             this.Paint += Form1_Paint;
             this.KeyDown += Form1_KeyDown;
@@ -71,7 +71,7 @@ namespace project
         }
         void create_world()
         {
-            wrld.wrld = new Bitmap("world.png"); // we will change the image later
+            wrld.wrld = new Bitmap("Background/3d7761617e61f51b3b2f397c147a43d9.jpg"); // we will change the image later
             wrld.rcDst = new Rectangle(0,0, ClientSize.Width, ClientSize.Height);
             wrld.rcSrc = new Rectangle(0, wrld.wrld.Height - (wrld.wrld.Height / 2), wrld.wrld.Width / 3, wrld.wrld.Height - (wrld.wrld.Height / 2));
         }
