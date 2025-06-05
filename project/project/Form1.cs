@@ -22,7 +22,7 @@ namespace project
         CAdvImgActor wrld = new CAdvImgActor();
         public Form1()
         {
-            //WindowState= FormWindowState.Maximized;
+            WindowState= FormWindowState.Maximized;
             this.Load += Form1_Load;
             this.Paint += Form1_Paint;
             this.KeyDown += Form1_KeyDown;
@@ -39,22 +39,22 @@ namespace project
                 case Keys.D:
                     if (wrld.rcSrc.X + wrld.rcSrc.Width <= wrld.wrld.Width)
                     {
-                        wrld.rcSrc.X += 5;
+                        wrld.rcSrc.X += 2;
                     }
                     break;
                 case Keys.A:
                     if (wrld.rcSrc.X >= 0)
                     {
-                        wrld.rcSrc.X -= 5;
+                        wrld.rcSrc.X -= 2;
                     }
                     break;
                 case Keys.W:
                     if (wrld.rcSrc.Y >= 0)
-                        wrld.rcSrc.Y -= 5;
+                        wrld.rcSrc.Y -= 2;
                     break;
                 case Keys.S:
                     if (wrld.rcSrc.Y + wrld.rcSrc.Height <= wrld.wrld.Height)
-                        wrld.rcSrc.Y += 5;
+                        wrld.rcSrc.Y += 2;
                     break;
             }
             DrawDubb(this.CreateGraphics());
@@ -69,14 +69,21 @@ namespace project
         {
             DrawDubb(e.Graphics);
         }
-
+        void create_world()
+        {
+            wrld.wrld = new Bitmap("world.png"); // we will change the image later
+            wrld.rcDst = new Rectangle(0,0, ClientSize.Width, ClientSize.Height);
+            wrld.rcSrc = new Rectangle(0, wrld.wrld.Height - (wrld.wrld.Height / 2), wrld.wrld.Width / 3, wrld.wrld.Height - (wrld.wrld.Height / 2));
+        }
         private void Form1_Load(object sender, EventArgs e)
         {
             off = new Bitmap(ClientSize.Width,ClientSize.Height);
+            create_world();
         }
         void DrawScene(Graphics g)
         {
             g.Clear(Color.White);
+            g.DrawImage(wrld.wrld, wrld.rcDst, wrld.rcSrc, GraphicsUnit.Pixel);
         }
         void DrawDubb(Graphics g)
         {
