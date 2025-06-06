@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -15,11 +16,22 @@ namespace project
         public Bitmap wrld;
         public Rectangle rcDst, rcSrc;
     }
+    public class people
+    {
+        public int X, Y;
+        public List<Bitmap> frames;
+        public int iFrame;
+        //Dir right or Left 
+        public int Dir;
+        //state Running/ walking or standing
+        public int state;
+    }
     public partial class Form1 : Form
     {
         Bitmap off;
         Timer tt= new Timer();
         CAdvImgActor wrld = new CAdvImgActor();
+        people Hero = new people();
         public Form1()
         {
            // WindowState= FormWindowState.Maximized;
@@ -41,11 +53,20 @@ namespace project
                     {
                         wrld.rcSrc.X += 2;
                     }
+                    if (Hero.X <= wrld.wrld.Width)
+                    {
+                        Hero.X += 2;
+                    }
                     break;
                 case Keys.A:
                     if (wrld.rcSrc.X >= 0)
                     {
                         wrld.rcSrc.X -= 2;
+                    }
+                    if(Hero.X>=0)
+                    {
+                        Hero.X -= 2;
+                       
                     }
                     break;
                 case Keys.W:
@@ -75,16 +96,35 @@ namespace project
             wrld.rcDst = new Rectangle(0,0, ClientSize.Width, ClientSize.Height);
             wrld.rcSrc = new Rectangle(0, wrld.wrld.Height - (wrld.wrld.Height / 2), wrld.wrld.Width / 3, wrld.wrld.Height - (wrld.wrld.Height / 2));
         }
+        void create_Hero()
+        {
+            Hero.X = 50;
+            Hero.Y = 150;
+            Bitmap img = new Bitmap("Heros/Frames/walk/HeroW1.png");
+            Hero.frames.Add(img);
+             img = new Bitmap("Heros/Frames/walk/HeroW2.png");
+            Hero.frames.Add(img);
+             img = new Bitmap("Heros/Frames/walk/HeroW3.png");
+            Hero.frames.Add(img);
+             img = new Bitmap("Heros/Frames/walk/HeroW4.png");
+            Hero.frames.Add(img);
+            Hero.state = 0;
+            Hero.iFrame = 0;
+
+
+        }
         private void Form1_Load(object sender, EventArgs e)
         {
             off = new Bitmap(ClientSize.Width,ClientSize.Height);
             create_world();
+            create_Hero();
         }
         void DrawScene(Graphics g)
         {
             g.Clear(Color.White);
             g.DrawImage(wrld.wrld, wrld.rcDst, wrld.rcSrc, GraphicsUnit.Pixel);
         }
+        
         void DrawDubb(Graphics g)
         {
             Graphics g2 = Graphics.FromImage(off);
