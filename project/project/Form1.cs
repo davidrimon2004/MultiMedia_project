@@ -38,6 +38,8 @@ namespace project
         Bitmap iff;
         int ctjump = 0;
         int y = 300;
+        int speed = 3;
+        int speed2 = 3;
         public Form1()
         {
            // WindowState= FormWindowState.Maximized;
@@ -56,16 +58,21 @@ namespace project
             {
                 case Keys.D:
                     Eliot.state = 0;
-                    if (wrld.rcSrc.X + wrld.rcSrc.Width <= wrld.wrld.Width && Eliot.X>=( ClientSize.Width/2)-100)
+                    if (wrld.rcSrc.X + wrld.rcSrc.Width <= wrld.wrld.Width && Eliot.X >= (ClientSize.Width / 2) - 100)
                     {
+                        speed = 0;
                         wrld.rcSrc.X += 3;
+                    }
+                    else
+                    {
+                        speed = 3;
                     }
                     if (Eliot.X <= ClientSize.Width - Eliot.frames[Eliot.iFrame].Width)
                     {
-                       // Eliot.X += 2;
-                        if (Eliot.X<=ClientSize.Width)
+                        // Eliot.X += 2;
+                        if (Eliot.X <= ClientSize.Width)
                         {
-                            Eliot.X += 3;
+                            Eliot.X += speed ;
                         }
                         if (Eliot.iFrame < 3)
                         {
@@ -89,11 +96,17 @@ namespace project
                         if (Eliot.X <= ClientSize.Width/2)
                         {
                             wrld.rcSrc.X -= 3;
+                            speed2 = 0;
                         }
+                        
+                    }
+                    else
+                    {
+                        speed2 = 3;
                     }
                     if (Eliot.X >= 0)
                     {
-                        Eliot.X -= 3;
+                        Eliot.X -= speed2;
                     }
                     if (Eliot.X >= 0)
                     {
