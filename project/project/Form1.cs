@@ -16,7 +16,7 @@ namespace project
         public Bitmap wrld;
         public Rectangle rcDst, rcSrc;
     }
-    public class people
+    public class CMultiImg
     {
         public int X, Y;
         public List<Bitmap> frames;
@@ -25,17 +25,19 @@ namespace project
         public int Dir;
         //state Running/ walking or standing
         public int state;
+        public bool gravity;
     }
     public partial class Form1 : Form
     {
         Bitmap off;
         Timer tt= new Timer();
         CAdvImgActor wrld = new CAdvImgActor();
-        people Eliot = new people();
+        CMultiImg Eliot = new CMultiImg();
         int ct = 0;
         int ctTick = 0;
         Bitmap iff;
-
+        int ctjump = 0;
+        int y = 300;
         public Form1()
         {
            // WindowState= FormWindowState.Maximized;
@@ -53,19 +55,19 @@ namespace project
             switch (e.KeyCode) //scrolling logic
             {
                 case Keys.D:
-                   Eliot.state = 0;
-                    if (wrld.rcSrc.X + wrld.rcSrc.Width <= wrld.wrld.Width)
+                    Eliot.state = 0;
+                    if (wrld.rcSrc.X + wrld.rcSrc.Width <= wrld.wrld.Width && Eliot.X>=( ClientSize.Width/2)-100)
                     {
-                        wrld.rcSrc.X += 2;
+                        wrld.rcSrc.X += 3;
                     }
-                    if (Eliot.X <= this.Width - Eliot.frames[Eliot.iFrame].Width)
+                    if (Eliot.X <= ClientSize.Width - Eliot.frames[Eliot.iFrame].Width)
                     {
                        // Eliot.X += 2;
-                        if(!(wrld.rcSrc.X + wrld.rcSrc.Width <= wrld.wrld.Width))
+                        if (Eliot.X<=ClientSize.Width)
                         {
-                            Eliot.X += 4;
+                            Eliot.X += 3;
                         }
-                        if(Eliot.iFrame<3)
+                        if (Eliot.iFrame < 3)
                         {
                             if (ct % 4 == 0)
                             {
@@ -81,23 +83,23 @@ namespace project
                     }
                     break;
                 case Keys.A:
-                   // Eliot.state = 1;
+                    // Eliot.state = 1;
                     if (wrld.rcSrc.X >= 0)
                     {
-                        if (Eliot.X <=100)
+                        if (Eliot.X <= ClientSize.Width/2)
                         {
-                            wrld.rcSrc.X -= 2;
+                            wrld.rcSrc.X -= 3;
                         }
                     }
-                    if (Eliot.X>100)
+                    if (Eliot.X >= 0)
                     {
-                        Eliot.X -= 4;
+                        Eliot.X -= 3;
                     }
-                    if (Eliot.X>=0)
+                    if (Eliot.X >= 0)
                     {
-                       // Eliot.X -= 2;
+                        // Eliot.X -= 2;
                         Eliot.state = 1;
-                        if (Eliot.iFrame < 7 )
+                        if (Eliot.iFrame < 7)
                         {
                             if (ct % 4 == 0)
                             {
@@ -113,20 +115,26 @@ namespace project
                     }
                     break;
                 case Keys.W:
-                    if (wrld.rcSrc.Y >= 0)
-                        wrld.rcSrc.Y -= 2;
-                    break;
+                    if (wrld.rcSrc.Y >= 0 && !Eliot.gravity)
+                    {
+                        wrld.rcSrc.Y -= 5; Eliot.Y -= 5; Eliot.gravity = true;
+                    }
+                    else if (Eliot.Y >= y)
+                    {
+                        Eliot.Y += 5;
+                    }
+                        break;
                 case Keys.S:
                     if (wrld.rcSrc.Y + wrld.rcSrc.Height <= wrld.wrld.Height)
                         wrld.rcSrc.Y += 2;
                     break;
+               
             }
             DrawDubb(this.CreateGraphics());
         }
 
         private void Tt_Tick(object sender, EventArgs e)
         {
-            DrawDubb(this.CreateGraphics());
 
             if (ctTick % 3 == 0)
             {
@@ -139,7 +147,20 @@ namespace project
                     Eliot.iFrame=4;
                 }
             }
+            if (Eliot.gravity )
+            {
+                ctjump++;
+                if (ctjump == 5)
+                {
+                    ctjump = 0;
+                    Eliot.Y += 5; 
+                    wrld.rcSrc.Y += 5;
+                    Eliot.gravity = false; 
+                }
+
+            }
             ctTick++;
+            DrawDubb(this.CreateGraphics());
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)
