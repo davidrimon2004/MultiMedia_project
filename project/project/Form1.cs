@@ -31,7 +31,11 @@ namespace project
         Bitmap off;
         Timer tt= new Timer();
         CAdvImgActor wrld = new CAdvImgActor();
-        people Hero = new people();
+        people Eliot = new people();
+        int ct = 0;
+        int ctTick = 0;
+        Bitmap iff;
+
         public Form1()
         {
            // WindowState= FormWindowState.Maximized;
@@ -49,24 +53,63 @@ namespace project
             switch (e.KeyCode) //scrolling logic
             {
                 case Keys.D:
+                   Eliot.state = 0;
                     if (wrld.rcSrc.X + wrld.rcSrc.Width <= wrld.wrld.Width)
                     {
                         wrld.rcSrc.X += 2;
                     }
-                    if (Hero.X <= wrld.wrld.Width)
+                    if (Eliot.X <= this.Width - Eliot.frames[Eliot.iFrame].Width)
                     {
-                        Hero.X += 2;
+                       // Eliot.X += 2;
+                        if(!(wrld.rcSrc.X + wrld.rcSrc.Width <= wrld.wrld.Width))
+                        {
+                            Eliot.X += 4;
+                        }
+                        if(Eliot.iFrame<3)
+                        {
+                            if (ct % 4 == 0)
+                            {
+                                Eliot.iFrame++;
+
+                            }
+                            ct++;
+                        }
+                        else
+                        {
+                            Eliot.iFrame = 1;
+                        }
                     }
                     break;
                 case Keys.A:
+                   // Eliot.state = 1;
                     if (wrld.rcSrc.X >= 0)
                     {
-                        wrld.rcSrc.X -= 2;
+                        if (Eliot.X <=100)
+                        {
+                            wrld.rcSrc.X -= 2;
+                        }
                     }
-                    if(Hero.X>=0)
+                    if (Eliot.X>100)
                     {
-                        Hero.X -= 2;
-                       
+                        Eliot.X -= 4;
+                    }
+                    if (Eliot.X>=0)
+                    {
+                       // Eliot.X -= 2;
+                        Eliot.state = 1;
+                        if (Eliot.iFrame < 7 )
+                        {
+                            if (ct % 4 == 0)
+                            {
+                                Eliot.iFrame++;
+                            }
+                            ct++;
+                        }
+                        else
+                        {
+                            Eliot.iFrame = 4;
+
+                        }
                     }
                     break;
                 case Keys.W:
@@ -84,6 +127,19 @@ namespace project
         private void Tt_Tick(object sender, EventArgs e)
         {
             DrawDubb(this.CreateGraphics());
+
+            if (ctTick % 3 == 0)
+            {
+                if (Eliot.state == 0)
+                { 
+                    Eliot.iFrame = 0; 
+                }
+                else if (Eliot.state == 1)
+                {
+                    Eliot.iFrame=4;
+                }
+            }
+            ctTick++;
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)
@@ -98,31 +154,46 @@ namespace project
         }
         void create_Hero()
         {
-            Hero.X = 50;
-            Hero.Y = 150;
+            Eliot.frames = new List<Bitmap>();
+            Eliot.X = 100;
+            Eliot.Y = 300;
+            //if Hero walks forward state =0
             Bitmap img = new Bitmap("Heros/Frames/walk/HeroW1.png");
-            Hero.frames.Add(img);
+            Eliot.frames.Add(img);
              img = new Bitmap("Heros/Frames/walk/HeroW2.png");
-            Hero.frames.Add(img);
+            Eliot.frames.Add(img);
              img = new Bitmap("Heros/Frames/walk/HeroW3.png");
-            Hero.frames.Add(img);
+            Eliot.frames.Add(img);
              img = new Bitmap("Heros/Frames/walk/HeroW4.png");
-            Hero.frames.Add(img);
-            Hero.state = 0;
-            Hero.iFrame = 0;
+            Eliot.frames.Add(img);
+            //if Hero walks back state =1
+            img = new Bitmap("Heros/Frames/walk/HeroW1rev.png");
+            Eliot.frames.Add(img);
+            img = new Bitmap("Heros/Frames/walk/HeroW2rev.png");
+            Eliot.frames.Add(img);
+            img = new Bitmap("Heros/Frames/walk/HeroW3rev.png");
+            Eliot.frames.Add(img);
+            img = new Bitmap("Heros/Frames/walk/HeroW4rev.png");
+            Eliot.frames.Add(img);
+            //
+            Eliot.state = 0;
+            Eliot.iFrame = 0;
 
 
         }
+        
         private void Form1_Load(object sender, EventArgs e)
         {
             off = new Bitmap(ClientSize.Width,ClientSize.Height);
             create_world();
             create_Hero();
+            
         }
         void DrawScene(Graphics g)
         {
             g.Clear(Color.White);
             g.DrawImage(wrld.wrld, wrld.rcDst, wrld.rcSrc, GraphicsUnit.Pixel);
+            g.DrawImage(Eliot.frames[Eliot.iFrame], Eliot.X, Eliot.Y);
         }
         
         void DrawDubb(Graphics g)
