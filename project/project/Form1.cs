@@ -16,7 +16,7 @@ namespace project
         public Bitmap wrld;
         public Rectangle rcDst, rcSrc;
     }
-    public class CMultiImg
+    public class CMultiImgActor
     {
         public int X, Y;
         public List<Bitmap> frames;
@@ -32,7 +32,7 @@ namespace project
         Bitmap off;
         Timer tt= new Timer();
         CAdvImgActor wrld = new CAdvImgActor();
-        CMultiImg Eliot = new CMultiImg();
+        CMultiImgActor Eliot = new CMultiImgActor();
         int ct = 0;
         int ctTick = 0;
         Bitmap iff;
