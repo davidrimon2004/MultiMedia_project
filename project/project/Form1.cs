@@ -35,7 +35,7 @@ namespace project
     public partial class Form1 : Form
     {
         Bitmap off;
-        Timer tt= new Timer();
+        Timer tt = new Timer();
         CAdvImgActor wrld = new CAdvImgActor();
         CMultiImgActor Eliot = new CMultiImgActor();
         List<CImageActor> gun = new List<CImageActor>();
@@ -47,39 +47,65 @@ namespace project
         int speed = 3;
         int speed2 = 3;
         int igun; //0->right , //1->left
+        Rectangle temp;
+        Rectangle temp2;
         public Form1()
         {
-           // WindowState= FormWindowState.Maximized;
+            // WindowState= FormWindowState.Maximized;
             this.Load += Form1_Load;
             this.Paint += Form1_Paint;
-            this.KeyDown += Form1_KeyDown; 
+            this.KeyDown += Form1_KeyDown;
             tt.Interval = 1000 / 60; // 60 FPS
             tt.Start();
             tt.Tick += Tt_Tick;
             InitializeComponent();
         }
-
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            off = new Bitmap(ClientSize.Width, ClientSize.Height);
+            create_world();
+            create_Hero();
+            create_gun();
+        }
+        private void Tt_Tick(object sender, EventArgs e)
+        {
+            if (Eliot.gravity)
+            {
+                ctjump++;
+                if (ctjump == 5)
+                {
+                    ctjump = 0;
+                    Eliot.Y += 5;
+                    wrld.rcSrc.Y += 5;
+                    Eliot.gravity = false;
+                }
+            }
+            igun = Eliot.state;
+            movegun();
+            ctTick++;
+            DrawDubb(this.CreateGraphics());
+        }
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode) //scrolling logic
             {
                 case Keys.D:
                     Eliot.state = 0;
-                    if (wrld.rcSrc.X + wrld.rcSrc.Width <= wrld.wrld.Width && Eliot.X >= (ClientSize.Width / 2) - 100)
-                    {
-                        speed = 0;
-                        wrld.rcSrc.X += 3;
-                    }
-                    else
-                    {
-                        speed = 3;
-                    }
+                    // if (wrld.rcSrc.X + wrld.rcSrc.Width <= wrld.wrld.Width && Eliot.X >= (ClientSize.Width / 2) - 100)
+                    // {
+                    speed = 0;
+                    wrld.rcSrc.X += 3;
+                    //}
+                    //else
+                    //{
+                    //    speed = 3;
+                    //}
                     if (Eliot.X <= ClientSize.Width - Eliot.frames[Eliot.iFrame].Width)
                     {
                         // Eliot.X += 2;
                         if (Eliot.X <= ClientSize.Width)
                         {
-                            Eliot.X += speed ;
+                            Eliot.X += speed;
 
                         }
                         if (Eliot.iFrame < 3)
@@ -101,12 +127,12 @@ namespace project
                     // Eliot.state = 1;
                     if (wrld.rcSrc.X >= 0)
                     {
-                        if (Eliot.X <= ClientSize.Width/2)
+                        if (Eliot.X <= ClientSize.Width / 2)
                         {
                             wrld.rcSrc.X -= 3;
                             speed2 = 0;
                         }
-                        
+
                     }
                     else
                     {
@@ -119,6 +145,10 @@ namespace project
                     if (Eliot.X >= 0)
                     {
                         // Eliot.X -= 2;
+                        if (Eliot.state == 0)
+                        {
+                            Eliot.iFrame = 4;
+                        }
                         Eliot.state = 1;
                         if (Eliot.iFrame < 7)
                         {
@@ -144,7 +174,7 @@ namespace project
                     {
                         Eliot.Y += 5;
                     }
-                        break;
+                    break;
                 case Keys.S:
                     if (wrld.rcSrc.Y + wrld.rcSrc.Height <= wrld.wrld.Height)
                         wrld.rcSrc.Y += 2;
@@ -152,7 +182,7 @@ namespace project
                 case Keys.Q:
                     if (wrld.rcSrc.Y >= 0 && !Eliot.gravity)
                     {
-                        wrld.rcSrc.Y -= 5; 
+                        wrld.rcSrc.Y -= 5;
                         Eliot.Y -= 5;
                         Eliot.X -= 10;
                         Eliot.gravity = true;
@@ -211,37 +241,6 @@ namespace project
             movegun();
             DrawDubb(this.CreateGraphics());
         }
-
-        private void Tt_Tick(object sender, EventArgs e)
-        {
-
-            if (ctTick % 3 == 0)
-            {
-                if (Eliot.state == 0)
-                { 
-                    Eliot.iFrame = 0; 
-                }
-                else if (Eliot.state == 1)
-                {
-                    Eliot.iFrame=4;
-                }
-            }
-            if (Eliot.gravity)
-            {
-                ctjump++;
-                if (ctjump == 5)
-                {
-                    ctjump = 0;
-                    Eliot.Y += 5; 
-                    wrld.rcSrc.Y += 5;
-                    Eliot.gravity = false; 
-                }
-            }
-            igun = Eliot.state;
-            movegun();
-            ctTick++;
-            DrawDubb(this.CreateGraphics());
-        }
         void movegun()
         {
             switch (igun)
@@ -255,20 +254,18 @@ namespace project
             }
             gun[igun].y = Eliot.Y + 15;
         }
-        private void Form1_Paint(object sender, PaintEventArgs e)
-        {
-            DrawDubb(e.Graphics);
-        }
         void create_world()
         {
-            wrld.wrld = new Bitmap("Background/3d7761617e61f51b3b2f397c147a43d9.jpg"); // we will change the image later
-            wrld.rcDst = new Rectangle(0,0, ClientSize.Width, ClientSize.Height);
+            wrld.wrld = new Bitmap("Background/529660ac1a23f254ab7edacd8336809a9f3106f9c2571c08edba961e468b7bc5.jpg"); // we will change the image later
+            wrld.rcDst = new Rectangle(0, 0, ClientSize.Width, ClientSize.Height);
             wrld.rcSrc = new Rectangle(0, wrld.wrld.Height - (wrld.wrld.Height / 2), wrld.wrld.Width / 3, wrld.wrld.Height - (wrld.wrld.Height / 2));
+            temp = new Rectangle(0, wrld.wrld.Height - (wrld.wrld.Height / 2), 0, wrld.wrld.Height - (wrld.wrld.Height / 2));
+            temp2 = new Rectangle(0, 0, 0, ClientSize.Height);
         }
         void create_gun()
         {
             CImageActor pnn = new CImageActor();
-            pnn.x = Eliot.X + Eliot.frames[0].Width-17;
+            pnn.x = Eliot.X + Eliot.frames[0].Width - 17;
             pnn.y = Eliot.Y + 15;
             pnn.img = new Bitmap("guns/gun.jpeg");
             pnn.img.MakeTransparent(pnn.img.GetPixel(0, 0));
@@ -277,26 +274,26 @@ namespace project
             pnn = new CImageActor();
             pnn.y = Eliot.Y + 15;
             pnn.img = new Bitmap("guns/gun2.jpeg");
-            pnn.x = Eliot.X-30;
+            pnn.x = Eliot.X - 30;
             pnn.img.MakeTransparent(pnn.img.GetPixel(0, 0));
             gun.Add(pnn);
         }
         void create_Hero()
         {
             Eliot.frames = new List<Bitmap>();
-            Eliot.X = 100;
-            Eliot.Y = 300;
+            Eliot.X = 150;
+            Eliot.Y = 260;
             //if Hero walks forward state =0
             Bitmap img = new Bitmap("Heros/Frames/walk/HeroW1.png");
             img.MakeTransparent(img.GetPixel(0, 0));
             Eliot.frames.Add(img);
-             img = new Bitmap("Heros/Frames/walk/HeroW2.png");
+            img = new Bitmap("Heros/Frames/walk/HeroW2.png");
             img.MakeTransparent(img.GetPixel(0, 0));
             Eliot.frames.Add(img);
-             img = new Bitmap("Heros/Frames/walk/HeroW3.png");
+            img = new Bitmap("Heros/Frames/walk/HeroW3.png");
             img.MakeTransparent(img.GetPixel(0, 0));
             Eliot.frames.Add(img);
-             img = new Bitmap("Heros/Frames/walk/HeroW4.png");
+            img = new Bitmap("Heros/Frames/walk/HeroW4.png");
             img.MakeTransparent(img.GetPixel(0, 0));
             Eliot.frames.Add(img);
             //if Hero walks back state =1
@@ -312,28 +309,38 @@ namespace project
             img = new Bitmap("Heros/Frames/walk/HeroW4rev.png");
             img.MakeTransparent(img.GetPixel(0, 0));
             Eliot.frames.Add(img);
-            //
+            //if hero jumps(bases odam) hero state =2 
+
+            // if hero jumps(bases wara) hero state =3
             Eliot.state = 0;
             Eliot.iFrame = 0;
 
 
         }
-        
-        private void Form1_Load(object sender, EventArgs e)
+        private void Form1_Paint(object sender, PaintEventArgs e)
         {
-            off = new Bitmap(ClientSize.Width,ClientSize.Height);
-            create_world();
-            create_Hero();
-            create_gun();
+            DrawDubb(e.Graphics);
         }
         void DrawScene(Graphics g)
         {
             g.Clear(Color.White);
             g.DrawImage(wrld.wrld, wrld.rcDst, wrld.rcSrc, GraphicsUnit.Pixel);
+            if (wrld.rcSrc.X + wrld.rcSrc.Width > wrld.wrld.Width)//sa7
+            {
+                temp.Width = -(wrld.wrld.Width - (wrld.rcSrc.X + wrld.rcSrc.Width));
+                temp2.Width = temp.Width * 2;
+                temp2.X = ClientSize.Width - temp2.Width;
+                g.DrawImage(wrld.wrld, temp2, temp, GraphicsUnit.Pixel);
+                if (temp2.Width == ClientSize.Width)
+                {
+                    wrld.rcDst = new Rectangle(0, 0, ClientSize.Width, ClientSize.Height);
+                    wrld.rcSrc = new Rectangle(0, wrld.wrld.Height - (wrld.wrld.Height / 2), wrld.wrld.Width / 3, wrld.wrld.Height - (wrld.wrld.Height / 2));
+                }
+            }
             g.DrawImage(Eliot.frames[Eliot.iFrame], Eliot.X, Eliot.Y);
-            g.DrawImage(gun[igun].img, gun[igun].x, gun[igun].y,50,50);
+            g.DrawImage(gun[igun].img, gun[igun].x, gun[igun].y, 50, 50);
+
         }
-        
         void DrawDubb(Graphics g)
         {
             Graphics g2 = Graphics.FromImage(off);
