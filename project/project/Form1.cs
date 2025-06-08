@@ -45,7 +45,7 @@ namespace project
            // WindowState= FormWindowState.Maximized;
             this.Load += Form1_Load;
             this.Paint += Form1_Paint;
-            this.KeyDown += Form1_KeyDown;
+            this.KeyDown += Form1_KeyDown; 
             tt.Interval = 1000 / 60; // 60 FPS
             tt.Start();
             tt.Tick += Tt_Tick;
@@ -141,7 +141,64 @@ namespace project
                     if (wrld.rcSrc.Y + wrld.rcSrc.Height <= wrld.wrld.Height)
                         wrld.rcSrc.Y += 2;
                     break;
-               
+                case Keys.Q:
+                    if (wrld.rcSrc.Y >= 0 && !Eliot.gravity)
+                    {
+                        wrld.rcSrc.Y -= 5; 
+                        Eliot.Y -= 5;
+                        Eliot.X -= 10;
+                        Eliot.gravity = true;
+                    }
+                    else if (Eliot.Y >= y)
+                    {
+                        Eliot.Y += 5;
+                    }
+                    if (Eliot.X >= 0)
+                    {
+                        // Eliot.X -= 2;
+                        Eliot.state = 1;
+                        if (Eliot.iFrame < 7)
+                        {
+                            if (ct % 4 == 0)
+                            {
+                                Eliot.iFrame++;
+                            }
+                            ct++;
+                        }
+                        else
+                        {
+                            Eliot.iFrame = 4;
+
+                        }
+                    }
+                    break;
+                case Keys.E:
+                    if (wrld.rcSrc.Y >= 0 && !Eliot.gravity)
+                    {
+                        wrld.rcSrc.Y -= 5;
+                        Eliot.Y -= 5;
+                        Eliot.X += 10;
+                        Eliot.gravity = true;
+                    }
+                    else if (Eliot.Y >= y)
+                    {
+                        Eliot.Y += 5;
+                    }
+                    if (Eliot.iFrame < 3)
+                    {
+                        if (ct % 4 == 0)
+                        {
+                            Eliot.iFrame++;
+
+                        }
+                        ct++;
+                    }
+                    else
+                    {
+                        Eliot.iFrame = 1;
+                    }
+                    break;
+
             }
             DrawDubb(this.CreateGraphics());
         }
@@ -160,7 +217,7 @@ namespace project
                     Eliot.iFrame=4;
                 }
             }
-            if (Eliot.gravity )
+            if (Eliot.gravity)
             {
                 ctjump++;
                 if (ctjump == 5)
@@ -170,7 +227,6 @@ namespace project
                     wrld.rcSrc.Y += 5;
                     Eliot.gravity = false; 
                 }
-
             }
             ctTick++;
             DrawDubb(this.CreateGraphics());
