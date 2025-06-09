@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
@@ -188,6 +189,7 @@ namespace project
                     break;
 
                 case Keys.Q:
+                    igun = 1;
                     if (wrld.rcSrc.Y >= 0 && !Eliot.gravity &&Eliot.Y>=y)
                     {
                        
@@ -238,7 +240,7 @@ namespace project
                     break;
 
                 case Keys.E:
-                   
+                    igun = 0;
                     if (wrld.rcSrc.X + wrld.rcSrc.Width <= wrld.wrld.Width && Eliot.X >= (ClientSize.Width / 2) - 100 && Eliot.Y >= y)
                     {
                         speed = 0;
@@ -358,8 +360,32 @@ namespace project
             img.MakeTransparent(img.GetPixel(0, 0));
             Eliot.frames.Add(img);
             //if hero jumps(bases odam) hero state =2 
-
+            img = new Bitmap("Heros/Frames/jump/Hero1.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Eliot.frames.Add(img);
+            img = new Bitmap("Heros/Frames/jump/Hero2.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Eliot.frames.Add(img);
+            img = new Bitmap("Heros/Frames/jump/Hero3.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Eliot.frames.Add(img);
+            img = new Bitmap("Heros/Frames/jump/Hero4.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Eliot.frames.Add(img);
             // if hero jumps(bases wara) hero state =3
+            img = new Bitmap("Heros/Frames/jump/Hero1rev.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Eliot.frames.Add(img);
+            img = new Bitmap("Heros/Frames/jump/Hero2rev.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Eliot.frames.Add(img);
+            img = new Bitmap("Heros/Frames/jump/Hero3rev.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Eliot.frames.Add(img);
+            img = new Bitmap("Heros/Frames/jump/Hero4rev.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Eliot.frames.Add(img);
+
             Eliot.state = 0;
             Eliot.iFrame = 0;
 
