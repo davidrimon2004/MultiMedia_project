@@ -32,6 +32,8 @@ namespace project
     {
         public int x, y;
         public Bitmap img;
+        public bool islife;
+        public int dir;
     }
     public partial class Form1 : Form
     {
@@ -40,6 +42,9 @@ namespace project
         CAdvImgActor wrld = new CAdvImgActor();
         CMultiImgActor Eliot = new CMultiImgActor();
         List<CImageActor> gun = new List<CImageActor>();
+        List<CImageActor> bullets = new List<CImageActor>();
+        List<CImageActor> fixedObjects = new List<CImageActor>();
+        List<CMultiImgActor> enemies = new List<CMultiImgActor>();
         int ct = 0;
         int ctTick = 0;
         Bitmap iff;
@@ -47,7 +52,8 @@ namespace project
         int y = 260;
         int speed = 10;
         int speed2 = 10;
-        int igun; //0->right , //1->left
+        int igun;//0->right , //1->left
+        CImageActor pnn2 = new CImageActor();
         //Rectangle temp;
         //Rectangle temp2;
         public Form1()
@@ -86,6 +92,9 @@ namespace project
             }
             igun = Eliot.state;
             movegun();
+            MoveBullets();
+            this.Text = bullets.Count.ToString();
+            CheckB();
             ctTick++;
             DrawDubb(this.CreateGraphics());
         }
@@ -285,112 +294,179 @@ namespace project
                         }
                     }
                     break;
+                    case Keys.Space:
+                        Create_Bullets();
+                    break;
 
             }
             movegun();
+            MoveBullets();
+            CheckB();
             DrawDubb(this.CreateGraphics());
         }
-        void movegun()
+        void CheckB()
         {
-            switch (igun)
+            int XS = wrld.rcSrc.X;
+            int YS = wrld.rcSrc.Y;
+            for (int i = 0; i < bullets.Count; i++)
             {
-                case 0:
-                    gun[0].x = Eliot.X + Eliot.frames[0].Width - 17;
-                    break;
-                    
-                case 1:
-                    gun[1].x = Eliot.X - 30;
-                    break;
+                CImageActor ptrav = bullets[i];
+                if (ptrav.x >= ClientSize.Width || ptrav.x < -10)
+                {
+                    bullets.Remove(ptrav);
+                }
+                for (int j = 0; j < enemies.Count; j++)
+                {
+                    CMultiImgActor enemy = enemies[j];
+                    if ((ptrav.x >= enemy.X - XS && (ptrav.y <= enemy.Y - YS && ptrav.y >= y) && ptrav.dir == 1)
+                        || (ptrav.x <= enemy.X - XS && (ptrav.y <= enemy.Y - YS && ptrav.y >= y) && ptrav.dir == -1)) // will need testing 8aleban feha bug
+                    {
+                        bullets.Remove(ptrav);
+                        break;
+                    }
+                }
+                for (int j = 0; j < fixedObjects.Count; j++)
+                {
+                    CImageActor fixedObj = fixedObjects[j];
+                    if ((ptrav.x >= fixedObj.x - XS && (ptrav.y <= fixedObj.y - YS && ptrav.y >= y) && ptrav.dir == 1)
+                        || (ptrav.x <= fixedObj.x - XS && (ptrav.y <= fixedObj.y - YS && ptrav.y >= y) && ptrav.dir == -1))
+                    {
+                        bullets.Remove(ptrav);
+                        break;
+                    }
+                }
             }
-            gun[igun].y = Eliot.Y + 15;
         }
-        void create_world()
-        {
-            wrld.wrld = new Bitmap("Background/529660ac1a23f254ab7edacd8336809a9f3106f9c2571c08edba961e468b7bc5.jpg"); // we will change the image later
-            wrld.rcDst = new Rectangle(0, 0, ClientSize.Width, ClientSize.Height);
-            wrld.rcSrc = new Rectangle(0, wrld.wrld.Height - (wrld.wrld.Height / 2), wrld.wrld.Width / 3, wrld.wrld.Height - (wrld.wrld.Height / 2));
-            //temp = new Rectangle(0, wrld.wrld.Height - (wrld.wrld.Height / 2), 0, wrld.wrld.Height - (wrld.wrld.Height / 2));
-            //temp2 = new Rectangle(0, 0, 0, ClientSize.Height);
-        }
-        void create_gun()
-        {
-            CImageActor pnn = new CImageActor();
-            pnn.x = Eliot.X + Eliot.frames[0].Width - 17;
-            pnn.y = Eliot.Y + 15;
-            pnn.img = new Bitmap("guns/gun.jpeg");
-            pnn.img.MakeTransparent(pnn.img.GetPixel(0, 0));
-            gun.Add(pnn);
+            void movegun()
+            {
+                switch (igun)
+                {
+                    case 0:
+                        gun[0].x = Eliot.X + Eliot.frames[0].Width - 17;
+                        break;
 
-            pnn = new CImageActor();
-            pnn.y = Eliot.Y + 15;
-            pnn.img = new Bitmap("guns/gun2.jpeg");
-            pnn.x = Eliot.X - 30;
-            pnn.img.MakeTransparent(pnn.img.GetPixel(0, 0));
-            gun.Add(pnn);
-        }
-        void create_Hero()
-        {
-            Eliot.frames = new List<Bitmap>();
-            Eliot.X = 150;
-            Eliot.Y = 260;
-            //if Hero walks forward state =0
-            Bitmap img = new Bitmap("Heros/Frames/walk/HeroW1.png");
-            img.MakeTransparent(img.GetPixel(0, 0));
-            Eliot.frames.Add(img);
-            img = new Bitmap("Heros/Frames/walk/HeroW2.png");
-            img.MakeTransparent(img.GetPixel(0, 0));
-            Eliot.frames.Add(img);
-            img = new Bitmap("Heros/Frames/walk/HeroW3.png");
-            img.MakeTransparent(img.GetPixel(0, 0));
-            Eliot.frames.Add(img);
-            img = new Bitmap("Heros/Frames/walk/HeroW4.png");
-            img.MakeTransparent(img.GetPixel(0, 0));
-            Eliot.frames.Add(img);
-            //if Hero walks back state =1
-            img = new Bitmap("Heros/Frames/walk/HeroW1rev.png");
-            img.MakeTransparent(img.GetPixel(0, 0));
-            Eliot.frames.Add(img);
-            img = new Bitmap("Heros/Frames/walk/HeroW2rev.png");
-            img.MakeTransparent(img.GetPixel(0, 0));
-            Eliot.frames.Add(img);
-            img = new Bitmap("Heros/Frames/walk/HeroW3rev.png");
-            img.MakeTransparent(img.GetPixel(0, 0));
-            Eliot.frames.Add(img);
-            img = new Bitmap("Heros/Frames/walk/HeroW4rev.png");
-            img.MakeTransparent(img.GetPixel(0, 0));
-            Eliot.frames.Add(img);
-            //if hero jumps(bases odam) hero state =2 
-            img = new Bitmap("Heros/Frames/jump/Hero1.png");
-            img.MakeTransparent(img.GetPixel(0, 0));
-            Eliot.frames.Add(img);
-            img = new Bitmap("Heros/Frames/jump/Hero2.png");
-            img.MakeTransparent(img.GetPixel(0, 0));
-            Eliot.frames.Add(img);
-            img = new Bitmap("Heros/Frames/jump/Hero3.png");
-            img.MakeTransparent(img.GetPixel(0, 0));
-            Eliot.frames.Add(img);
-            img = new Bitmap("Heros/Frames/jump/Hero4.png");
-            img.MakeTransparent(img.GetPixel(0, 0));
-            Eliot.frames.Add(img);
-            // if hero jumps(bases wara) hero state =3
-            img = new Bitmap("Heros/Frames/jump/Hero1rev.png");
-            img.MakeTransparent(img.GetPixel(0, 0));
-            Eliot.frames.Add(img);
-            img = new Bitmap("Heros/Frames/jump/Hero2rev.png");
-            img.MakeTransparent(img.GetPixel(0, 0));
-            Eliot.frames.Add(img);
-            img = new Bitmap("Heros/Frames/jump/Hero3rev.png");
-            img.MakeTransparent(img.GetPixel(0, 0));
-            Eliot.frames.Add(img);
-            img = new Bitmap("Heros/Frames/jump/Hero4rev.png");
-            img.MakeTransparent(img.GetPixel(0, 0));
-            Eliot.frames.Add(img);
+                    case 1:
+                        gun[1].x = Eliot.X - 30;
+                        break;
+                }
+                gun[igun].y = Eliot.Y + 15;
+            }
+            void create_world()
+            {
+                wrld.wrld = new Bitmap("Background/529660ac1a23f254ab7edacd8336809a9f3106f9c2571c08edba961e468b7bc5.jpg"); // we will change the image later
+                wrld.rcDst = new Rectangle(0, 0, ClientSize.Width, ClientSize.Height);
+                wrld.rcSrc = new Rectangle(0, wrld.wrld.Height - (wrld.wrld.Height / 2), wrld.wrld.Width / 3, wrld.wrld.Height - (wrld.wrld.Height / 2));
+                //temp = new Rectangle(0, wrld.wrld.Height - (wrld.wrld.Height / 2), 0, wrld.wrld.Height - (wrld.wrld.Height / 2));
+                //temp2 = new Rectangle(0, 0, 0, ClientSize.Height);
+            }
+            void create_gun()
+            {
+                CImageActor pnn = new CImageActor();
+                pnn.x = Eliot.X + Eliot.frames[0].Width - 17;
+                pnn.y = Eliot.Y + 15;
+                pnn.img = new Bitmap("guns/gun.jpeg");
+                pnn.img.MakeTransparent(pnn.img.GetPixel(0, 0));
+                gun.Add(pnn);
 
-            Eliot.state = 0;
-            Eliot.iFrame = 0;
+                pnn = new CImageActor();
+                pnn.y = Eliot.Y + 15;
+                pnn.img = new Bitmap("guns/gun2.jpeg");
+                pnn.x = Eliot.X - 30;
+                pnn.img.MakeTransparent(pnn.img.GetPixel(0, 0));
+                gun.Add(pnn);
+            }
+            void Create_Bullets()
+            {
+                CImageActor pnn = new CImageActor();
+                switch (igun)
+                {
+                    case 0:
+                        pnn.x = gun[0].x + 50;
+                        pnn.y = gun[0].y;
+                        pnn.img = new Bitmap("guns/bullet.png");
+                        pnn.dir = 1;
+                        break;
+                    case 1:
+                        pnn.x = gun[1].x - 10;
+                        pnn.y = gun[1].y;
+                        pnn.img = new Bitmap("guns/bullet2.png");
+                        pnn.dir = -1;
+                        break;
+                }
+                pnn.islife = true;
+                bullets.Add(pnn);
+            }
+            void MoveBullets()
+            {
+                for (int i = 0; i < bullets.Count; i++)
+                {
+                    bullets[i].x += (10 * bullets[i].dir);
+                }
+            }
+            void create_Hero()
+            {
+                Eliot.frames = new List<Bitmap>();
+                Eliot.X = 150;
+                Eliot.Y = 260;
+                //if Hero walks forward state =0
+                Bitmap img = new Bitmap("Heros/Frames/walk/HeroW1.png");
+                img.MakeTransparent(img.GetPixel(0, 0));
+                Eliot.frames.Add(img);
+                img = new Bitmap("Heros/Frames/walk/HeroW2.png");
+                img.MakeTransparent(img.GetPixel(0, 0));
+                Eliot.frames.Add(img);
+                img = new Bitmap("Heros/Frames/walk/HeroW3.png");
+                img.MakeTransparent(img.GetPixel(0, 0));
+                Eliot.frames.Add(img);
+                img = new Bitmap("Heros/Frames/walk/HeroW4.png");
+                img.MakeTransparent(img.GetPixel(0, 0));
+                Eliot.frames.Add(img);
+                //if Hero walks back state =1
+                img = new Bitmap("Heros/Frames/walk/HeroW1rev.png");
+                img.MakeTransparent(img.GetPixel(0, 0));
+                Eliot.frames.Add(img);
+                img = new Bitmap("Heros/Frames/walk/HeroW2rev.png");
+                img.MakeTransparent(img.GetPixel(0, 0));
+                Eliot.frames.Add(img);
+                img = new Bitmap("Heros/Frames/walk/HeroW3rev.png");
+                img.MakeTransparent(img.GetPixel(0, 0));
+                Eliot.frames.Add(img);
+                img = new Bitmap("Heros/Frames/walk/HeroW4rev.png");
+                img.MakeTransparent(img.GetPixel(0, 0));
+                Eliot.frames.Add(img);
+                //if hero jumps(bases odam) hero state =2 
+                img = new Bitmap("Heros/Frames/jump/Hero1.png");
+                img.MakeTransparent(img.GetPixel(0, 0));
+                Eliot.frames.Add(img);
+                img = new Bitmap("Heros/Frames/jump/Hero2.png");
+                img.MakeTransparent(img.GetPixel(0, 0));
+                Eliot.frames.Add(img);
+                img = new Bitmap("Heros/Frames/jump/Hero3.png");
+                img.MakeTransparent(img.GetPixel(0, 0));
+                Eliot.frames.Add(img);
+                img = new Bitmap("Heros/Frames/jump/Hero4.png");
+                img.MakeTransparent(img.GetPixel(0, 0));
+                Eliot.frames.Add(img);
+                // if hero jumps(bases wara) hero state =3
+                img = new Bitmap("Heros/Frames/jump/Hero1rev.png");
+                img.MakeTransparent(img.GetPixel(0, 0));
+                Eliot.frames.Add(img);
+                img = new Bitmap("Heros/Frames/jump/Hero2rev.png");
+                img.MakeTransparent(img.GetPixel(0, 0));
+                Eliot.frames.Add(img);
+                img = new Bitmap("Heros/Frames/jump/Hero3rev.png");
+                img.MakeTransparent(img.GetPixel(0, 0));
+                Eliot.frames.Add(img);
+                img = new Bitmap("Heros/Frames/jump/Hero4rev.png");
+                img.MakeTransparent(img.GetPixel(0, 0));
+                Eliot.frames.Add(img);
+
+                Eliot.state = 0;
+                Eliot.iFrame = 0;
 
 
-        }
+            }
+        
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
             DrawDubb(e.Graphics);
@@ -399,21 +475,16 @@ namespace project
         {
             g.Clear(Color.White);
             g.DrawImage(wrld.wrld, wrld.rcDst, wrld.rcSrc, GraphicsUnit.Pixel);
-            //if (wrld.rcSrc.X + wrld.rcSrc.Width > wrld.wrld.Width)//sa7
-            //{
-            //    temp.Width = -(wrld.wrld.Width - (wrld.rcSrc.X + wrld.rcSrc.Width));
-            //    temp2.Width = temp.Width * 2;
-            //    temp2.X = ClientSize.Width - temp2.Width;
-            //    g.DrawImage(wrld.wrld, temp2, temp, GraphicsUnit.Pixel);
-            //    if (temp2.Width == ClientSize.Width)
-            //    {
-            //        wrld.rcDst = new Rectangle(0, 0, ClientSize.Width, ClientSize.Height);
-            //        wrld.rcSrc = new Rectangle(0, wrld.wrld.Height - (wrld.wrld.Height / 2), wrld.wrld.Width / 3, wrld.wrld.Height - (wrld.wrld.Height / 2));
-            //    }
-            //}
             g.DrawImage(Eliot.frames[Eliot.iFrame], Eliot.X, Eliot.Y);
             g.DrawImage(gun[igun].img, gun[igun].x, gun[igun].y, 50, 50);
-
+            int XS= wrld.rcSrc.X;
+            int YS= wrld.rcSrc.Y;
+            for (int i=0;i<bullets.Count;i++)
+            {
+                
+                    g.DrawImage(bullets[i].img, bullets[i].x, bullets[i].y, 45, 45);
+                
+            }
         }
         void DrawDubb(Graphics g)
         {
