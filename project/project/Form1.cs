@@ -34,6 +34,7 @@ namespace project
         public Bitmap img;
         public bool islife;
         public int dir;
+        public int W, H;
     }
     public partial class Form1 : Form
     {
@@ -44,6 +45,7 @@ namespace project
         List<CImageActor> gun = new List<CImageActor>();
         List<CImageActor> bullets = new List<CImageActor>();
         List<CImageActor> fixedObjects = new List<CImageActor>();
+        List<CImageActor> fixedwalls = new List<CImageActor>();
         List<CMultiImgActor> enemies = new List<CMultiImgActor>();
         int ct = 0;
         int ctTick = 0;
@@ -73,6 +75,7 @@ namespace project
             create_world();
             create_Hero();
             create_gun();
+            create_Tiles();
         }
         private void Tt_Tick(object sender, EventArgs e)
         {
@@ -297,7 +300,10 @@ namespace project
                     case Keys.Space:
                         Create_Bullets();
                     break;
-
+                case Keys.L:
+                    Eliot.Y -= 10;
+                    wrld.rcSrc.Y -= 10;
+                    break;
             }
             movegun();
             MoveBullets();
@@ -306,8 +312,8 @@ namespace project
         }
         void CheckB()
         {
-            int XS = wrld.rcSrc.X;
-            int YS = wrld.rcSrc.Y;
+            int XS = wrld.rcSrc.X * 19 / 10;
+            int YS = wrld.rcSrc.Y * 19 / 10;
             for (int i = 0; i < bullets.Count; i++)
             {
                 CImageActor ptrav = bullets[i];
@@ -466,7 +472,147 @@ namespace project
 
 
             }
-        
+        void create_Tiles()
+        {
+            CImageActor pnn = new CImageActor();
+            pnn.img = new Bitmap("Assets/Screenshot 2025-06-11 002908.png");
+            pnn.W = 160;
+            pnn.H = 40;
+            pnn.x = 850+ wrld.rcSrc.X;
+            pnn.y = 465+wrld.rcSrc.Y;
+            fixedObjects.Add(pnn);
+            for (int i = 0; i < 3; i++)
+            {
+                pnn = new CImageActor();
+                pnn.img = new Bitmap("Assets/Screenshot 2025-06-11 002908.png");
+                pnn.W = 160;
+                pnn.H = 40;
+                pnn.x = fixedObjects[fixedObjects.Count - 1].x + pnn.W;
+                pnn.y = fixedObjects[fixedObjects.Count - 1].y;
+                fixedObjects.Add(pnn);
+            }
+            pnn = new CImageActor();
+            pnn.img = new Bitmap("Assets/Screenshot 2025-06-11 002908.png");
+            pnn.W = 160;
+            pnn.H = 40;
+            pnn.x = fixedObjects[fixedObjects.Count - 1].x + pnn.W*2;
+            pnn.y = fixedObjects[fixedObjects.Count - 1].y;
+            fixedObjects.Add(pnn);
+            for (int i = 0; i < 4; i++)
+            {
+                pnn = new CImageActor();
+                pnn.img = new Bitmap("Assets/Screenshot 2025-06-11 002908.png");
+                pnn.W = 160;
+                pnn.H = 40;
+                pnn.x = fixedObjects[fixedObjects.Count - 1].x + pnn.W;
+                pnn.y = fixedObjects[fixedObjects.Count - 1].y;
+                fixedObjects.Add(pnn);
+            }
+            pnn = new CImageActor();
+            pnn.img = new Bitmap("Assets/Screenshot 2025-06-11 002908.png");
+            pnn.W = 160;
+            pnn.H = 40;
+            pnn.x = fixedObjects[fixedObjects.Count - 1].x -30;
+            pnn.y = fixedObjects[fixedObjects.Count - 1].y-pnn.H;
+            fixedObjects.Add(pnn);
+
+            for(int i=0;i<4;i++)
+            {
+                pnn = new CImageActor();
+                pnn.img = new Bitmap("Assets/Screenshot 2025-06-11 002908.png");
+                pnn.W = 160;
+                pnn.H = 40;
+                pnn.x = fixedObjects[fixedObjects.Count - 1].x - pnn.W*3/2;
+                pnn.y = fixedObjects[fixedObjects.Count - 1].y - pnn.H*2;
+                fixedObjects.Add(pnn);
+            }
+
+
+            for (int i = 0; i < 4; i++)
+            {
+                pnn = new CImageActor();
+                pnn.img = new Bitmap("Assets/Screenshot 2025-06-11 002908.png");
+                pnn.W = 160;
+                pnn.H = 40;
+                pnn.x = fixedObjects[fixedObjects.Count - 1].x - pnn.W;
+                pnn.y = fixedObjects[fixedObjects.Count - 1].y;
+                fixedObjects.Add(pnn);
+            }
+
+            pnn = new CImageActor();
+            pnn.img = new Bitmap("Assets/Screenshot 2025-06-11 002908.png");
+            pnn.W = 160;
+            pnn.H = 40;
+            pnn.x = fixedObjects[fixedObjects.Count - 1].x-pnn.W ;
+            pnn.y = fixedObjects[fixedObjects.Count - 1].y-200;
+            fixedObjects.Add(pnn);
+            for (int i = 0; i < 2; i++)
+            {
+                pnn = new CImageActor();
+                pnn.img = new Bitmap("Assets/Screenshot 2025-06-11 002908.png");
+                pnn.W = 160;
+                pnn.H = 40;
+                pnn.x = fixedObjects[fixedObjects.Count - 1].x - pnn.W;
+                pnn.y = fixedObjects[fixedObjects.Count - 1].y;
+                fixedObjects.Add(pnn);
+            }
+
+            pnn = new CImageActor();
+            pnn.x = wrld.wrld.Width*18/10 + wrld.rcSrc.X;
+            pnn.y = fixedObjects[fixedObjects.Count - 1].y-30;
+            pnn.img = new Bitmap("Assets/Screenshot 2025-06-11 002908.png");
+            pnn.W = 160;
+            pnn.H = 40;
+            fixedObjects.Add(pnn);
+            for (int i = 0; i < 3; i++)
+            {
+                pnn = new CImageActor();
+                pnn.img = new Bitmap("Assets/Screenshot 2025-06-11 002908.png");
+                pnn.W = 160;
+                pnn.H = 40;
+                pnn.x = fixedObjects[fixedObjects.Count - 1].x - pnn.W;
+                pnn.y = fixedObjects[fixedObjects.Count - 1].y;
+                fixedObjects.Add(pnn);
+            }
+
+
+            pnn = new CImageActor();
+            pnn.x =0 +wrld.rcSrc.X;
+            pnn.y = 465 + wrld.rcSrc.Y;
+            pnn.img = new Bitmap("Assets/Screenshot 2025-06-11 002908.png");
+            pnn.W = 160;
+            pnn.H = 40;
+            fixedObjects.Add(pnn);
+            for(int i=0;i<3;i++)
+            {
+                pnn = new CImageActor();
+                pnn.img = new Bitmap("Assets/Screenshot 2025-06-11 002908.png");
+                pnn.W = 160;
+                pnn.H = 40;
+                pnn.x = fixedObjects[fixedObjects.Count - 1].x + pnn.W;
+                pnn.y = fixedObjects[fixedObjects.Count - 1].y;
+                fixedObjects.Add(pnn);
+            }
+
+            pnn = new CImageActor();
+            pnn.x = (160*4)+ wrld.rcSrc.X;
+            pnn.y = 465 + wrld.rcSrc.Y;
+            pnn.img = new Bitmap("Assets/smallbrick.png");
+            pnn.W = 50;
+            pnn.H = 40;
+            fixedwalls.Add(pnn);
+            for (int i = 0; i < 9; i++)
+            {
+                pnn = new CImageActor();
+                pnn.img = new Bitmap("Assets/smallbrick.png");
+                pnn.W = 50;
+                pnn.H = 40;
+                pnn.x = fixedwalls[fixedwalls.Count - 1].x ;
+                pnn.y = fixedwalls[fixedwalls.Count - 1].y-pnn.H;
+                fixedwalls.Add(pnn);
+            }
+
+        }
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
             DrawDubb(e.Graphics);
@@ -477,14 +623,21 @@ namespace project
             g.DrawImage(wrld.wrld, wrld.rcDst, wrld.rcSrc, GraphicsUnit.Pixel);
             g.DrawImage(Eliot.frames[Eliot.iFrame], Eliot.X, Eliot.Y);
             g.DrawImage(gun[igun].img, gun[igun].x, gun[igun].y, 50, 50);
-            int XS= wrld.rcSrc.X;
-            int YS= wrld.rcSrc.Y;
+            int XS= wrld.rcSrc.X *19/10;
+            int YS= wrld.rcSrc.Y*19/10;
             for (int i=0;i<bullets.Count;i++)
             {
-                
                     g.DrawImage(bullets[i].img, bullets[i].x, bullets[i].y, 45, 45);
-                
             }
+            for(int i=0;i<fixedObjects.Count;i++)
+            {
+                g.DrawImage(fixedObjects[i].img, fixedObjects[i].x - XS, fixedObjects[i].y - YS, fixedObjects[i].W, fixedObjects[i].H);
+            }
+            for (int i = 0; i < fixedwalls.Count; i++)
+            {
+                g.DrawImage(fixedwalls[i].img, fixedwalls[i].x - XS, fixedwalls[i].y - YS, fixedwalls[i].W, fixedwalls[i].H);
+            }
+
         }
         void DrawDubb(Graphics g)
         {

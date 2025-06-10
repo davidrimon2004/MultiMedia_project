@@ -25,3 +25,4 @@ C:\Users\minam\MultiMedia_project\project\project\obj\Debug\project.csproj.Gener
 C:\Users\minam\MultiMedia_project\project\project\obj\Debug\project.csproj.CoreCompileInputs.cache
 C:\Users\minam\MultiMedia_project\project\project\obj\Debug\project.exe
 C:\Users\minam\MultiMedia_project\project\project\obj\Debug\project.pdb
+C:\Users\minam\MultiMedia_project\project\project\obj\Debug\project.exe.config
