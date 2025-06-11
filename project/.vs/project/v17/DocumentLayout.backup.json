@@ -40,7 +40,11 @@
               "RelativeDocumentMoniker": "project\\Form1.cs",
               "ToolTip": "C:\\Users\\minam\\MultiMedia_project\\project\\project\\Form1.cs*",
               "RelativeToolTip": "project\\Form1.cs*",
+<<<<<<< HEAD
               "ViewState": "AgIAAFICAAAAAAAAAAAAwFsCAAAhAAAAAAAAAA==",
+=======
+              "ViewState": "AgIAADMBAAAAAAAAAAA8wEsBAAAyAAAAAAAAAA==",
+>>>>>>> 53d474af191cd9cba5a35a200e8d245217720ed9
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-30T20:25:12.163Z",
               "EditorCaption": ""

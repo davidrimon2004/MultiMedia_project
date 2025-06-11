@@ -100,6 +100,7 @@ namespace project
             CheckB();
             ctTick++;
             DrawDubb(this.CreateGraphics());
+
         }
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
@@ -312,8 +313,13 @@ namespace project
         }
         void CheckB()
         {
+<<<<<<< HEAD
             int XS = wrld.rcSrc.X * 19 / 10;
             int YS = wrld.rcSrc.Y * 19 / 10;
+=======
+            int XS = wrld.rcSrc.X *2;
+            int YS = wrld.rcSrc.Y*2;
+>>>>>>> 53d474af191cd9cba5a35a200e8d245217720ed9
             for (int i = 0; i < bullets.Count; i++)
             {
                 CImageActor ptrav = bullets[i];
@@ -334,8 +340,8 @@ namespace project
                 for (int j = 0; j < fixedObjects.Count; j++)
                 {
                     CImageActor fixedObj = fixedObjects[j];
-                    if ((ptrav.x >= fixedObj.x - XS && (ptrav.y <= fixedObj.y - YS && ptrav.y >= y) && ptrav.dir == 1)
-                        || (ptrav.x <= fixedObj.x - XS && (ptrav.y <= fixedObj.y - YS && ptrav.y >= y) && ptrav.dir == -1))
+                    if ((ptrav.x >= fixedObj.x -XS && (ptrav.y <= fixedObj.y - YS && ptrav.y >= y) && ptrav.dir == 1)
+                        || (ptrav.x <= fixedObj.x - XS  && (ptrav.y <= fixedObj.y - YS && ptrav.y >= y) && ptrav.dir == -1))
                     {
                         bullets.Remove(ptrav);
                         break;
@@ -365,7 +371,7 @@ namespace project
                 //temp = new Rectangle(0, wrld.wrld.Height - (wrld.wrld.Height / 2), 0, wrld.wrld.Height - (wrld.wrld.Height / 2));
                 //temp2 = new Rectangle(0, 0, 0, ClientSize.Height);
             }
-            void create_gun()
+        void create_gun()
             {
                 CImageActor pnn = new CImageActor();
                 pnn.x = Eliot.X + Eliot.frames[0].Width - 17;
@@ -409,6 +415,7 @@ namespace project
                     bullets[i].x += (10 * bullets[i].dir);
                 }
             }
+<<<<<<< HEAD
             void create_Hero()
             {
                 Eliot.frames = new List<Bitmap>();
@@ -612,9 +619,75 @@ namespace project
                 fixedwalls.Add(pnn);
             }
 
+=======
+        
+        void create_Hero()
+        {
+            Eliot.frames = new List<Bitmap>();
+            Eliot.X = 150;
+            Eliot.Y = 260;
+            //if Hero walks forward state =0
+            Bitmap img = new Bitmap("Heros/Frames/walk/HeroW1.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Eliot.frames.Add(img);
+            img = new Bitmap("Heros/Frames/walk/HeroW2.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Eliot.frames.Add(img);
+            img = new Bitmap("Heros/Frames/walk/HeroW3.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Eliot.frames.Add(img);
+            img = new Bitmap("Heros/Frames/walk/HeroW4.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Eliot.frames.Add(img);
+            //if Hero walks back state =1
+            img = new Bitmap("Heros/Frames/walk/HeroW1rev.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Eliot.frames.Add(img);
+            img = new Bitmap("Heros/Frames/walk/HeroW2rev.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Eliot.frames.Add(img);
+            img = new Bitmap("Heros/Frames/walk/HeroW3rev.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Eliot.frames.Add(img);
+            img = new Bitmap("Heros/Frames/walk/HeroW4rev.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Eliot.frames.Add(img);
+            //if hero jumps(bases odam) hero state =2 
+            img = new Bitmap("Heros/Frames/jump/Hero1.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Eliot.frames.Add(img);
+            img = new Bitmap("Heros/Frames/jump/Hero2.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Eliot.frames.Add(img);
+            img = new Bitmap("Heros/Frames/jump/Hero3.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Eliot.frames.Add(img);
+            img = new Bitmap("Heros/Frames/jump/Hero4.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Eliot.frames.Add(img);
+            // if hero jumps(bases wara) hero state =3
+            img = new Bitmap("Heros/Frames/jump/Hero1rev.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Eliot.frames.Add(img);
+            img = new Bitmap("Heros/Frames/jump/Hero2rev.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Eliot.frames.Add(img);
+            img = new Bitmap("Heros/Frames/jump/Hero3rev.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Eliot.frames.Add(img);
+            img = new Bitmap("Heros/Frames/jump/Hero4rev.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Eliot.frames.Add(img);
+
+            Eliot.state = 0;
+            Eliot.iFrame = 0;
+
+
+>>>>>>> 53d474af191cd9cba5a35a200e8d245217720ed9
         }
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
+            Create();
             DrawDubb(e.Graphics);
         }
         void DrawScene(Graphics g)
@@ -623,12 +696,18 @@ namespace project
             g.DrawImage(wrld.wrld, wrld.rcDst, wrld.rcSrc, GraphicsUnit.Pixel);
             g.DrawImage(Eliot.frames[Eliot.iFrame], Eliot.X, Eliot.Y);
             g.DrawImage(gun[igun].img, gun[igun].x, gun[igun].y, 50, 50);
+<<<<<<< HEAD
             int XS= wrld.rcSrc.X *19/10;
             int YS= wrld.rcSrc.Y*19/10;
+=======
+            int XS= wrld.rcSrc.X*2;
+            int YS= wrld.rcSrc.Y * 2;
+>>>>>>> 53d474af191cd9cba5a35a200e8d245217720ed9
             for (int i=0;i<bullets.Count;i++)
             {
                     g.DrawImage(bullets[i].img, bullets[i].x, bullets[i].y, 45, 45);
             }
+<<<<<<< HEAD
             for(int i=0;i<fixedObjects.Count;i++)
             {
                 g.DrawImage(fixedObjects[i].img, fixedObjects[i].x - XS, fixedObjects[i].y - YS, fixedObjects[i].W, fixedObjects[i].H);
@@ -638,6 +717,9 @@ namespace project
                 g.DrawImage(fixedwalls[i].img, fixedwalls[i].x - XS, fixedwalls[i].y - YS, fixedwalls[i].W, fixedwalls[i].H);
             }
 
+=======
+            
+>>>>>>> 53d474af191cd9cba5a35a200e8d245217720ed9
         }
         void DrawDubb(Graphics g)
         {
