@@ -136,13 +136,18 @@ namespace project
                         }
                         else
                         {
-                            Eliot.iFrame = 1;
+                            Eliot.iFrame = 0;
                         }
                     }
                     break;
 
                 case Keys.A:
-                    // Eliot.state = 1;
+                    if(Eliot.state==0)
+                    {
+                        Eliot.iFrame = 4;
+
+                    }
+                    Eliot.state = 1;
                     if (wrld.rcSrc.X >= 0)
                     {
                         if (Eliot.X <= ClientSize.Width / 2)
@@ -160,26 +165,22 @@ namespace project
                     {
                         Eliot.X -= speed2;
                     }
+                    
                     if (Eliot.X >= 0)
-                    {
-                        // Eliot.X -= 2;
-                        if (Eliot.state == 0)
-                        {
-                            Eliot.iFrame = 4;
-                        }
-                        Eliot.state = 1;
+                    { // Eliot.X += 2;
+                        
                         if (Eliot.iFrame < 7)
                         {
                             if (ct % 4 == 0)
                             {
                                 Eliot.iFrame++;
+
                             }
                             ct++;
                         }
                         else
                         {
                             Eliot.iFrame = 4;
-
                         }
                     }
                     break;
@@ -313,13 +314,9 @@ namespace project
         }
         void CheckB()
         {
-<<<<<<< HEAD
             int XS = wrld.rcSrc.X * 19 / 10;
             int YS = wrld.rcSrc.Y * 19 / 10;
-=======
-            int XS = wrld.rcSrc.X *2;
-            int YS = wrld.rcSrc.Y*2;
->>>>>>> 53d474af191cd9cba5a35a200e8d245217720ed9
+            
             for (int i = 0; i < bullets.Count; i++)
             {
                 CImageActor ptrav = bullets[i];
@@ -415,7 +412,7 @@ namespace project
                     bullets[i].x += (10 * bullets[i].dir);
                 }
             }
-<<<<<<< HEAD
+
             void create_Hero()
             {
                 Eliot.frames = new List<Bitmap>();
@@ -485,8 +482,8 @@ namespace project
             pnn.img = new Bitmap("Assets/Screenshot 2025-06-11 002908.png");
             pnn.W = 160;
             pnn.H = 40;
-            pnn.x = 850+ wrld.rcSrc.X;
-            pnn.y = 465+wrld.rcSrc.Y;
+            pnn.x = 850 + wrld.rcSrc.X;
+            pnn.y = 465 + wrld.rcSrc.Y;
             fixedObjects.Add(pnn);
             for (int i = 0; i < 3; i++)
             {
@@ -502,7 +499,7 @@ namespace project
             pnn.img = new Bitmap("Assets/Screenshot 2025-06-11 002908.png");
             pnn.W = 160;
             pnn.H = 40;
-            pnn.x = fixedObjects[fixedObjects.Count - 1].x + pnn.W*2;
+            pnn.x = fixedObjects[fixedObjects.Count - 1].x + pnn.W * 2;
             pnn.y = fixedObjects[fixedObjects.Count - 1].y;
             fixedObjects.Add(pnn);
             for (int i = 0; i < 4; i++)
@@ -519,18 +516,18 @@ namespace project
             pnn.img = new Bitmap("Assets/Screenshot 2025-06-11 002908.png");
             pnn.W = 160;
             pnn.H = 40;
-            pnn.x = fixedObjects[fixedObjects.Count - 1].x -30;
-            pnn.y = fixedObjects[fixedObjects.Count - 1].y-pnn.H;
+            pnn.x = fixedObjects[fixedObjects.Count - 1].x - 30;
+            pnn.y = fixedObjects[fixedObjects.Count - 1].y - pnn.H;
             fixedObjects.Add(pnn);
 
-            for(int i=0;i<4;i++)
+            for (int i = 0; i < 4; i++)
             {
                 pnn = new CImageActor();
                 pnn.img = new Bitmap("Assets/Screenshot 2025-06-11 002908.png");
                 pnn.W = 160;
                 pnn.H = 40;
-                pnn.x = fixedObjects[fixedObjects.Count - 1].x - pnn.W*3/2;
-                pnn.y = fixedObjects[fixedObjects.Count - 1].y - pnn.H*2;
+                pnn.x = fixedObjects[fixedObjects.Count - 1].x - pnn.W * 3 / 2;
+                pnn.y = fixedObjects[fixedObjects.Count - 1].y - pnn.H * 2;
                 fixedObjects.Add(pnn);
             }
 
@@ -550,8 +547,8 @@ namespace project
             pnn.img = new Bitmap("Assets/Screenshot 2025-06-11 002908.png");
             pnn.W = 160;
             pnn.H = 40;
-            pnn.x = fixedObjects[fixedObjects.Count - 1].x-pnn.W ;
-            pnn.y = fixedObjects[fixedObjects.Count - 1].y-200;
+            pnn.x = fixedObjects[fixedObjects.Count - 1].x - pnn.W;
+            pnn.y = fixedObjects[fixedObjects.Count - 1].y - 200;
             fixedObjects.Add(pnn);
             for (int i = 0; i < 2; i++)
             {
@@ -565,8 +562,8 @@ namespace project
             }
 
             pnn = new CImageActor();
-            pnn.x = wrld.wrld.Width*18/10 + wrld.rcSrc.X;
-            pnn.y = fixedObjects[fixedObjects.Count - 1].y-30;
+            pnn.x = wrld.wrld.Width * 18 / 10 + wrld.rcSrc.X;
+            pnn.y = fixedObjects[fixedObjects.Count - 1].y - 30;
             pnn.img = new Bitmap("Assets/Screenshot 2025-06-11 002908.png");
             pnn.W = 160;
             pnn.H = 40;
@@ -584,13 +581,13 @@ namespace project
 
 
             pnn = new CImageActor();
-            pnn.x =0 +wrld.rcSrc.X;
+            pnn.x = 0 + wrld.rcSrc.X;
             pnn.y = 465 + wrld.rcSrc.Y;
             pnn.img = new Bitmap("Assets/Screenshot 2025-06-11 002908.png");
             pnn.W = 160;
             pnn.H = 40;
             fixedObjects.Add(pnn);
-            for(int i=0;i<3;i++)
+            for (int i = 0; i < 3; i++)
             {
                 pnn = new CImageActor();
                 pnn.img = new Bitmap("Assets/Screenshot 2025-06-11 002908.png");
@@ -602,7 +599,7 @@ namespace project
             }
 
             pnn = new CImageActor();
-            pnn.x = (160*4)+ wrld.rcSrc.X;
+            pnn.x = (160 * 4) + wrld.rcSrc.X;
             pnn.y = 465 + wrld.rcSrc.Y;
             pnn.img = new Bitmap("Assets/smallbrick.png");
             pnn.W = 50;
@@ -614,80 +611,17 @@ namespace project
                 pnn.img = new Bitmap("Assets/smallbrick.png");
                 pnn.W = 50;
                 pnn.H = 40;
-                pnn.x = fixedwalls[fixedwalls.Count - 1].x ;
-                pnn.y = fixedwalls[fixedwalls.Count - 1].y-pnn.H;
+                pnn.x = fixedwalls[fixedwalls.Count - 1].x;
+                pnn.y = fixedwalls[fixedwalls.Count - 1].y - pnn.H;
                 fixedwalls.Add(pnn);
             }
 
-=======
-        
-        void create_Hero()
-        {
-            Eliot.frames = new List<Bitmap>();
-            Eliot.X = 150;
-            Eliot.Y = 260;
-            //if Hero walks forward state =0
-            Bitmap img = new Bitmap("Heros/Frames/walk/HeroW1.png");
-            img.MakeTransparent(img.GetPixel(0, 0));
-            Eliot.frames.Add(img);
-            img = new Bitmap("Heros/Frames/walk/HeroW2.png");
-            img.MakeTransparent(img.GetPixel(0, 0));
-            Eliot.frames.Add(img);
-            img = new Bitmap("Heros/Frames/walk/HeroW3.png");
-            img.MakeTransparent(img.GetPixel(0, 0));
-            Eliot.frames.Add(img);
-            img = new Bitmap("Heros/Frames/walk/HeroW4.png");
-            img.MakeTransparent(img.GetPixel(0, 0));
-            Eliot.frames.Add(img);
-            //if Hero walks back state =1
-            img = new Bitmap("Heros/Frames/walk/HeroW1rev.png");
-            img.MakeTransparent(img.GetPixel(0, 0));
-            Eliot.frames.Add(img);
-            img = new Bitmap("Heros/Frames/walk/HeroW2rev.png");
-            img.MakeTransparent(img.GetPixel(0, 0));
-            Eliot.frames.Add(img);
-            img = new Bitmap("Heros/Frames/walk/HeroW3rev.png");
-            img.MakeTransparent(img.GetPixel(0, 0));
-            Eliot.frames.Add(img);
-            img = new Bitmap("Heros/Frames/walk/HeroW4rev.png");
-            img.MakeTransparent(img.GetPixel(0, 0));
-            Eliot.frames.Add(img);
-            //if hero jumps(bases odam) hero state =2 
-            img = new Bitmap("Heros/Frames/jump/Hero1.png");
-            img.MakeTransparent(img.GetPixel(0, 0));
-            Eliot.frames.Add(img);
-            img = new Bitmap("Heros/Frames/jump/Hero2.png");
-            img.MakeTransparent(img.GetPixel(0, 0));
-            Eliot.frames.Add(img);
-            img = new Bitmap("Heros/Frames/jump/Hero3.png");
-            img.MakeTransparent(img.GetPixel(0, 0));
-            Eliot.frames.Add(img);
-            img = new Bitmap("Heros/Frames/jump/Hero4.png");
-            img.MakeTransparent(img.GetPixel(0, 0));
-            Eliot.frames.Add(img);
-            // if hero jumps(bases wara) hero state =3
-            img = new Bitmap("Heros/Frames/jump/Hero1rev.png");
-            img.MakeTransparent(img.GetPixel(0, 0));
-            Eliot.frames.Add(img);
-            img = new Bitmap("Heros/Frames/jump/Hero2rev.png");
-            img.MakeTransparent(img.GetPixel(0, 0));
-            Eliot.frames.Add(img);
-            img = new Bitmap("Heros/Frames/jump/Hero3rev.png");
-            img.MakeTransparent(img.GetPixel(0, 0));
-            Eliot.frames.Add(img);
-            img = new Bitmap("Heros/Frames/jump/Hero4rev.png");
-            img.MakeTransparent(img.GetPixel(0, 0));
-            Eliot.frames.Add(img);
 
-            Eliot.state = 0;
-            Eliot.iFrame = 0;
-
-
->>>>>>> 53d474af191cd9cba5a35a200e8d245217720ed9
         }
+     
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
-            Create();
+            
             DrawDubb(e.Graphics);
         }
         void DrawScene(Graphics g)
@@ -696,18 +630,12 @@ namespace project
             g.DrawImage(wrld.wrld, wrld.rcDst, wrld.rcSrc, GraphicsUnit.Pixel);
             g.DrawImage(Eliot.frames[Eliot.iFrame], Eliot.X, Eliot.Y);
             g.DrawImage(gun[igun].img, gun[igun].x, gun[igun].y, 50, 50);
-<<<<<<< HEAD
             int XS= wrld.rcSrc.X *19/10;
             int YS= wrld.rcSrc.Y*19/10;
-=======
-            int XS= wrld.rcSrc.X*2;
-            int YS= wrld.rcSrc.Y * 2;
->>>>>>> 53d474af191cd9cba5a35a200e8d245217720ed9
             for (int i=0;i<bullets.Count;i++)
             {
                     g.DrawImage(bullets[i].img, bullets[i].x, bullets[i].y, 45, 45);
             }
-<<<<<<< HEAD
             for(int i=0;i<fixedObjects.Count;i++)
             {
                 g.DrawImage(fixedObjects[i].img, fixedObjects[i].x - XS, fixedObjects[i].y - YS, fixedObjects[i].W, fixedObjects[i].H);
@@ -717,9 +645,6 @@ namespace project
                 g.DrawImage(fixedwalls[i].img, fixedwalls[i].x - XS, fixedwalls[i].y - YS, fixedwalls[i].W, fixedwalls[i].H);
             }
 
-=======
-            
->>>>>>> 53d474af191cd9cba5a35a200e8d245217720ed9
         }
         void DrawDubb(Graphics g)
         {

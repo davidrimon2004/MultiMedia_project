@@ -22,15 +22,15 @@
           "Children": [
             {
               "$type": "Bookmark",
-              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
-            },
-            {
-              "$type": "Bookmark",
               "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
             },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{40ea2e6b-2121-4bb8-a43e-c83c04b51041}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
             },
             {
               "$type": "Document",
@@ -40,11 +40,7 @@
               "RelativeDocumentMoniker": "project\\Form1.cs",
               "ToolTip": "C:\\Users\\minam\\MultiMedia_project\\project\\project\\Form1.cs",
               "RelativeToolTip": "project\\Form1.cs",
-<<<<<<< HEAD
-              "ViewState": "AgIAAG8CAAAAAAAAAAAwwIkCAAAAAAAAAAAAAA==",
-=======
-              "ViewState": "AgIAAFsBAAAAAAAAAAAuwGsBAAANAAAAAAAAAA==",
->>>>>>> 53d474af191cd9cba5a35a200e8d245217720ed9
+              "ViewState": "AgIAAHkCAAAAAAAAAAAgwIYCAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-30T20:25:12.163Z",
               "EditorCaption": ""
