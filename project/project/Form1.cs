@@ -42,12 +42,12 @@ namespace project
         Timer tt = new Timer();
         CAdvImgActor wrld = new CAdvImgActor();
         CMultiImgActor Eliot = new CMultiImgActor();
+        CImageActor singleBullet = new CImageActor();
         List<CImageActor> gun = new List<CImageActor>();
         List<CImageActor> bullets = new List<CImageActor>();
         List<CImageActor> fixedObjects = new List<CImageActor>();
         List<CImageActor> fixedwalls = new List<CImageActor>();
         List<CMultiImgActor> enemies = new List<CMultiImgActor>();
-        CImageActor singleBullet = new CImageActor();
         int ct = 0;
         int ctTick = 0;
         Bitmap iff;
@@ -77,6 +77,7 @@ namespace project
             create_Hero();
             create_gun();
             create_Tiles();
+            Create_Enemy();
         }
         private void Tt_Tick(object sender, EventArgs e)
         {
@@ -95,9 +96,12 @@ namespace project
                 }
             }
             igun = Eliot.state;
+            enemyhandle();
+            move_enemy();
             movegun();
             MoveBullets();
-            this.Text = bullets.Count.ToString();
+            this.Text = enemies[0].iFrame.ToString();
+            Console.WriteLine(enemies[0].iFrame.ToString());
             CheckB();
             ctTick++;
             DrawDubb(this.CreateGraphics());
@@ -311,13 +315,59 @@ namespace project
                     break;
                 case Keys.L:
                     Eliot.Y -= 10;
-                    wrld.rcSrc.Y -= 10;
+                    wrld.rcSrc.Y -= 15;
                     break;
             }
             movegun();
             MoveBullets();
             CheckB();
+            move_enemy();
+            enemyhandle();
             DrawDubb(this.CreateGraphics());
+        }
+        void Create_Enemy()
+        {
+            CMultiImgActor pnn = new CMultiImgActor();
+            pnn.frames = new List<Bitmap>();
+            for(int i = 0;i<8;i++)
+            {
+                Bitmap img = new Bitmap("enemies/ship_frames/" +(i + 1) + ".png");
+                img.MakeTransparent(img.GetPixel(0, 0));
+                pnn.frames.Add(img);
+            }
+            pnn.X = 5+ wrld.rcSrc.X;
+            pnn.Y = -150;
+            pnn.Dir = 1;
+            enemies.Add(pnn);
+        }
+        void enemyhandle()
+        {
+            if (enemies[0].X >= 400 + wrld.rcSrc.X || enemies[0].X<=5+wrld.rcSrc.X)
+            {
+                enemies[0].Dir *= -1;
+            }
+            if(enemies[0].X <= 5 + wrld.rcSrc.X || enemies[0].iFrame == 3)
+            {
+                enemies[0].iFrame = 0; 
+            }
+            if(enemies[0].X >= 400 + wrld.rcSrc.X || enemies[0].iFrame == 7)
+            {
+                enemies[0].iFrame = 4;
+            }
+        }
+        void move_enemy()
+        {
+            for (int i = 0; i < enemies.Count; i++)
+            {
+                if (ctTick % 5 == 0)
+                {
+                    enemies[i].iFrame++;
+                }
+                else
+                {
+                    enemies[i].X += (enemies[i].Dir * 5);
+                }
+            }
         }
         void CheckB()
         {
@@ -422,7 +472,7 @@ namespace project
             //temp = new Rectangle(0, wrld.wrld.Height - (wrld.wrld.Height / 2), 0, wrld.wrld.Height - (wrld.wrld.Height / 2));
             //temp2 = new Rectangle(0, 0, 0, ClientSize.Height);
         }
-         void create_gun()
+        void create_gun()
         {
             CImageActor pnn = new CImageActor();
             pnn.x = Eliot.X + Eliot.frames[0].Width - 17;
@@ -470,7 +520,6 @@ namespace project
                 singleBullet.x += (10 * singleBullet.dir);
             }
         }
-
         void create_Hero()
         {
             Eliot.frames = new List<Bitmap>();
@@ -676,10 +725,8 @@ namespace project
 
 
         }
-     
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
-            
             DrawDubb(e.Graphics);
         }
         void DrawScene(Graphics g)
@@ -706,7 +753,11 @@ namespace project
             {
                 g.DrawImage(singleBullet.img, singleBullet.x, singleBullet.y,70,70);
             }
-
+            for(int i=0;i<enemies.Count;i++)
+            {
+                CMultiImgActor ptrav = enemies[i];
+                g.DrawImage(ptrav.frames[ptrav.iFrame], ptrav.X - XS, ptrav.Y - YS);
+            }
         }
         void DrawDubb(Graphics g)
         {
