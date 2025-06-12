@@ -9,6 +9,7 @@ using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace project
 {
@@ -48,6 +49,7 @@ namespace project
         List<CImageActor> fixedwalls = new List<CImageActor>();
         List<CMultiImgActor> enemies = new List<CMultiImgActor>();
         CImageActor singleBullet = new CImageActor();
+        CMultiImgActor Laser=new CMultiImgActor();
         int ct = 0;
         int ctTick = 0;
         Bitmap iff;
@@ -57,6 +59,8 @@ namespace project
         int speed2 = 10;
         int igun;//0->right , //1->left
         CImageActor pnn2 = new CImageActor();
+        int ctLaser;
+        bool laserdmg = false;
         //Rectangle temp;
         //Rectangle temp2;
         public Form1()
@@ -77,6 +81,7 @@ namespace project
             create_Hero();
             create_gun();
             create_Tiles();
+            create_laser();
         }
         private void Tt_Tick(object sender, EventArgs e)
         {
@@ -95,13 +100,14 @@ namespace project
                 }
             }
             igun = Eliot.state;
+           
+            animateLaser();
             movegun();
             MoveBullets();
             this.Text = bullets.Count.ToString();
             CheckB();
             ctTick++;
             DrawDubb(this.CreateGraphics());
-
         }
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
@@ -168,7 +174,8 @@ namespace project
                     }
                     
                     if (Eliot.X >= 0)
-                    { // Eliot.X += 2;
+                    { 
+                            Eliot.X -= 2;
                         
                         if (Eliot.iFrame < 7)
                         {
@@ -316,6 +323,8 @@ namespace project
             }
             movegun();
             MoveBullets();
+            animateLaser();
+            LaserDMG();
             CheckB();
             DrawDubb(this.CreateGraphics());
         }
@@ -381,6 +390,56 @@ namespace project
                 }
             }
         }
+        void animateLaser()
+        {
+            if (Laser.state == 1)
+            {
+                if (ctTick % 2 == 0)
+                {
+                    if (Laser.iFrame <= 6)
+                    {
+                        Laser.iFrame++;
+                    }
+                    else if (Laser.iFrame == 7)
+                    {
+                        Laser.iFrame=0;
+                    }
+                }
+               
+            }
+            else if(ctLaser==100 && Laser.state == 0)
+            {
+                Laser.state = 1;
+                ctLaser = 0;
+            }
+            ctLaser++;
+            if (ctLaser==100 && Laser.state==1)
+            {
+                ctLaser = 0;
+                Laser.state = 0;
+                laserdmg=false;
+            }
+        }
+        void LaserDMG()
+        {
+            int XS = wrld.rcSrc.X * 19 / 10;
+            int YS = wrld.rcSrc.Y * 19 / 10;
+            if (Eliot.X <= Laser.X - XS + 80 && Eliot.X >= Laser.X - 20 - XS && Laser.state == 1 && laserdmg == false && Eliot.Y >=Laser.Y-YS)
+            {
+               // MessageBox.Show("I'm hit");
+                laserdmg = true;
+                if (Eliot.state==0)
+                {
+                    Eliot.X -= 100;
+                    laserdmg = false;
+                }
+                else 
+                {
+                    Eliot.X += 100;
+                    laserdmg = false;
+                }
+            }
+        }
         void Create_SB()
         {
             switch (igun)
@@ -414,6 +473,31 @@ namespace project
             }
             gun[igun].y = Eliot.Y + 15;
         }
+        void create_laser()
+        {
+            Laser.frames = new List<Bitmap>();
+            Bitmap img = new Bitmap("Laser/ezgif-splitl/frame_0_delay-0.05s.png");
+            Laser.frames.Add(img);
+            img = new Bitmap("Laser/ezgif-splitl/frame_1_delay-0.05s.png");
+            Laser.frames.Add(img);
+            img = new Bitmap("Laser/ezgif-splitl/frame_2_delay-0.05s.png");
+            Laser.frames.Add(img);
+            img = new Bitmap("Laser/ezgif-splitl/frame_3_delay-0.05s.png");
+            Laser.frames.Add(img);
+            img = new Bitmap("Laser/ezgif-splitl/frame_4_delay-0.05s.png");
+            Laser.frames.Add(img);
+            img = new Bitmap("Laser/ezgif-splitl/frame_5_delay-0.05s.png");
+            Laser.frames.Add(img);
+            img = new Bitmap("Laser/ezgif-splitl/frame_6_delay-0.05s.png");
+            Laser.frames.Add(img); 
+            img = new Bitmap("Laser/ezgif-splitl/frame_7_delay-0.05s.png");
+            Laser.frames.Add(img);
+            Laser.iFrame = 0;
+            //state 1 = laser is active state 0= laser is passive
+            Laser.state = 1;
+            Laser.X = 1750 + wrld.rcSrc.X;
+            Laser.Y = 500 +wrld.rcSrc.Y;
+        }
         void create_world()
         {
             wrld.wrld = new Bitmap("Background/529660ac1a23f254ab7edacd8336809a9f3106f9c2571c08edba961e468b7bc5.jpg"); // we will change the image later
@@ -422,7 +506,7 @@ namespace project
             //temp = new Rectangle(0, wrld.wrld.Height - (wrld.wrld.Height / 2), 0, wrld.wrld.Height - (wrld.wrld.Height / 2));
             //temp2 = new Rectangle(0, 0, 0, ClientSize.Height);
         }
-         void create_gun()
+        void create_gun()
         {
             CImageActor pnn = new CImageActor();
             pnn.x = Eliot.X + Eliot.frames[0].Width - 17;
@@ -676,7 +760,6 @@ namespace project
 
 
         }
-     
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
             
@@ -705,6 +788,10 @@ namespace project
             if(singleBullet.islife)
             {
                 g.DrawImage(singleBullet.img, singleBullet.x, singleBullet.y,70,70);
+            }
+            if(Laser.state==1)
+            {
+                g.DrawImage(Laser.frames[Laser.iFrame],Laser.X - XS, Laser.Y - YS, 130,150);
             }
 
         }
