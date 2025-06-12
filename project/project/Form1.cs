@@ -77,6 +77,7 @@ namespace project
             create_Hero();
             create_gun();
             create_Tiles();
+            Create_Enemy();
         }
         private void Tt_Tick(object sender, EventArgs e)
         {
@@ -98,6 +99,8 @@ namespace project
             movegun();
             MoveBullets();
             this.Text = bullets.Count.ToString();
+            enemyhandle();
+            move_enemy();
             CheckB();
             ctTick++;
             DrawDubb(this.CreateGraphics());
@@ -317,8 +320,55 @@ namespace project
             movegun();
             MoveBullets();
             CheckB();
+            enemyhandle();
+            move_enemy();
             DrawDubb(this.CreateGraphics());
         }
+        void Create_Enemy()
+        {
+            CMultiImgActor pnn = new CMultiImgActor();
+            pnn.frames = new List<Bitmap>();
+            for (int i = 0; i < 8; i++)
+            {
+                Bitmap img = new Bitmap("enemies/ship_frames/" + (i + 1) + ".png");
+                img.MakeTransparent(img.GetPixel(0, 0));
+                pnn.frames.Add(img);
+            }
+            pnn.X = 5 + wrld.rcSrc.X;
+            pnn.Y = -150;
+            pnn.Dir = 1;
+            enemies.Add(pnn);
+        }
+        void enemyhandle()
+        {
+            if (enemies[0].X >= 400 + wrld.rcSrc.X || enemies[0].X <= 5 + wrld.rcSrc.X)
+            {
+                enemies[0].Dir *= -1;
+            }
+            if (enemies[0].X <= 5 + wrld.rcSrc.X || enemies[0].iFrame == 3)
+            {
+                enemies[0].iFrame = 0;
+            }
+            if (enemies[0].X >= 400 + wrld.rcSrc.X || enemies[0].iFrame == 7)
+            {
+                enemies[0].iFrame = 4;
+            }
+        }
+        void move_enemy()
+        {
+            for (int i = 0; i < enemies.Count; i++)
+            {
+                if (ctTick % 5 == 0)
+                {
+                    enemies[i].iFrame++;
+                }
+                else
+                {
+                    enemies[i].X += (enemies[i].Dir * 5);
+                }
+            }
+        }
+
         void CheckB()
         {
             int XS = wrld.rcSrc.X * 19 / 10;
@@ -706,7 +756,10 @@ namespace project
             {
                 g.DrawImage(singleBullet.img, singleBullet.x, singleBullet.y,70,70);
             }
-
+            for(int i=0;i<enemies.Count; i++)
+            {
+                g.DrawImage(enemies[i].frames[enemies[i].iFrame], enemies[i].X - XS, enemies[i].Y - YS);
+            }
         }
         void DrawDubb(Graphics g)
         {
