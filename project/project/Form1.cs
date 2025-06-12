@@ -47,6 +47,7 @@ namespace project
         List<CImageActor> fixedObjects = new List<CImageActor>();
         List<CImageActor> fixedwalls = new List<CImageActor>();
         List<CMultiImgActor> enemies = new List<CMultiImgActor>();
+        CImageActor singleBullet = new CImageActor();
         int ct = 0;
         int ctTick = 0;
         Bitmap iff;
@@ -108,16 +109,16 @@ namespace project
             {
                 case Keys.D:
                     Eliot.state = 0;
-                    if (wrld.rcSrc.X + wrld.rcSrc.Width <= wrld.wrld.Width && Eliot.X >= (ClientSize.Width / 2) - 100)
+                    if (wrld.rcSrc.X + wrld.rcSrc.Width <= wrld.wrld.Width - 3 && Eliot.X >= (ClientSize.Width / 2) - 100)
                     {
                          speed = 0;
-                         wrld.rcSrc.X += 3;
+                         wrld.rcSrc.X += 6;
                     }
                     else
                     {
-                        speed = 3;
+                        speed = 6;
                     }
-                    if (Eliot.X <= ClientSize.Width - Eliot.frames[Eliot.iFrame].Width)
+                    if (Eliot.X  <= ClientSize.Width - Eliot.frames[Eliot.iFrame].Width)
                     {
                         // Eliot.X += 2;
                         if (Eliot.X <= ClientSize.Width)
@@ -148,18 +149,18 @@ namespace project
 
                     }
                     Eliot.state = 1;
-                    if (wrld.rcSrc.X >= 0)
+                    if (wrld.rcSrc.X > 3)
                     {
                         if (Eliot.X <= ClientSize.Width / 2)
                         {
-                            wrld.rcSrc.X -= 3;
+                            wrld.rcSrc.X -= 6;
                             speed2 = 0;
                         }
 
                     }
                     else
                     {
-                        speed2 = 3;
+                        speed2 = 6;
                     }
                     if (Eliot.X >= 0)
                     {
@@ -302,6 +303,12 @@ namespace project
                     case Keys.Space:
                         Create_Bullets();
                     break;
+                case Keys.X:
+                    if(!singleBullet.islife)
+                    {
+                        Create_SB(); 
+                    }
+                    break;
                 case Keys.L:
                     Eliot.Y -= 10;
                     wrld.rcSrc.Y -= 10;
@@ -328,7 +335,7 @@ namespace project
                 {
                     CMultiImgActor enemy = enemies[j];
                     if ((ptrav.x >= enemy.X - XS && (ptrav.y <= enemy.Y - YS && ptrav.y >= y) && ptrav.dir == 1)
-                        || (ptrav.x <= enemy.X - XS && (ptrav.y <= enemy.Y - YS && ptrav.y >= y) && ptrav.dir == -1)) // will need testing 8aleban feha bug
+                        || (ptrav.x <= enemy.X - XS && (ptrav.y <= enemy.Y - YS && ptrav.y >= y) && ptrav.dir == -1)) 
                     {
                         bullets.Remove(ptrav);
                         break;
@@ -345,137 +352,188 @@ namespace project
                     }
                 }
             }
+            if (singleBullet.islife)
+            {
+                CImageActor ptrav = singleBullet;
+                if (ptrav.x >= ClientSize.Width || ptrav.x < -10)
+                {
+                    singleBullet.islife = false;
+                }
+                for (int j = 0; j < enemies.Count; j++)
+                {
+                    CMultiImgActor enemy = enemies[j];
+                    if ((ptrav.x >= enemy.X - XS && (ptrav.y <= enemy.Y - YS && ptrav.y >= y) && ptrav.dir == 1)
+                        || (ptrav.x <= enemy.X - XS && (ptrav.y <= enemy.Y - YS && ptrav.y >= y) && ptrav.dir == -1))
+                    {
+                        singleBullet.islife = false;
+                        break;
+                    }
+                }
+                for (int j = 0; j < fixedObjects.Count; j++)
+                {
+                    CImageActor fixedObj = fixedObjects[j];
+                    if ((ptrav.x >= fixedObj.x - XS && (ptrav.y <= fixedObj.y - YS && ptrav.y >= y) && ptrav.dir == 1)
+                        || (ptrav.x <= fixedObj.x - XS && (ptrav.y <= fixedObj.y - YS && ptrav.y >= y) && ptrav.dir == -1))
+                    {
+                        singleBullet.islife = false;
+                        break;
+                    }
+                }
+            }
         }
-            void movegun()
+        void Create_SB()
+        {
+            switch (igun)
             {
-                switch (igun)
-                {
-                    case 0:
-                        gun[0].x = Eliot.X + Eliot.frames[0].Width - 17;
-                        break;
-
-                    case 1:
-                        gun[1].x = Eliot.X - 30;
-                        break;
-                }
-                gun[igun].y = Eliot.Y + 15;
+                case 0:
+                    singleBullet.x = gun[0].x + 50;
+                    singleBullet.y = gun[0].y-15;
+                    singleBullet.img = new Bitmap("guns/bulletS.png");
+                    singleBullet.dir = 1;
+                    break;
+                case 1:
+                    singleBullet.x = gun[1].x - 10;
+                    singleBullet.y = gun[1].y-15;
+                    singleBullet.img = new Bitmap("guns/bulletS2.png");
+                    singleBullet.dir = -1;
+                    break;
             }
-            void create_world()
+            singleBullet.islife = true;
+        }
+        void movegun()
+        {
+            switch (igun)
             {
-                wrld.wrld = new Bitmap("Background/529660ac1a23f254ab7edacd8336809a9f3106f9c2571c08edba961e468b7bc5.jpg"); // we will change the image later
-                wrld.rcDst = new Rectangle(0, 0, ClientSize.Width, ClientSize.Height);
-                wrld.rcSrc = new Rectangle(0, wrld.wrld.Height - (wrld.wrld.Height / 2), wrld.wrld.Width / 3, wrld.wrld.Height - (wrld.wrld.Height / 2));
-                //temp = new Rectangle(0, wrld.wrld.Height - (wrld.wrld.Height / 2), 0, wrld.wrld.Height - (wrld.wrld.Height / 2));
-                //temp2 = new Rectangle(0, 0, 0, ClientSize.Height);
+                case 0:
+                    gun[0].x = Eliot.X + Eliot.frames[0].Width - 17;
+                    break;
+
+                case 1:
+                    gun[1].x = Eliot.X - 30;
+                    break;
             }
-        void create_gun()
+            gun[igun].y = Eliot.Y + 15;
+        }
+        void create_world()
+        {
+            wrld.wrld = new Bitmap("Background/529660ac1a23f254ab7edacd8336809a9f3106f9c2571c08edba961e468b7bc5.jpg"); // we will change the image later
+            wrld.rcDst = new Rectangle(0, 0, ClientSize.Width, ClientSize.Height);
+            wrld.rcSrc = new Rectangle(0, wrld.wrld.Height - (wrld.wrld.Height / 2), wrld.wrld.Width / 3, wrld.wrld.Height - (wrld.wrld.Height / 2));
+            //temp = new Rectangle(0, wrld.wrld.Height - (wrld.wrld.Height / 2), 0, wrld.wrld.Height - (wrld.wrld.Height / 2));
+            //temp2 = new Rectangle(0, 0, 0, ClientSize.Height);
+        }
+         void create_gun()
+        {
+            CImageActor pnn = new CImageActor();
+            pnn.x = Eliot.X + Eliot.frames[0].Width - 17;
+            pnn.y = Eliot.Y + 15;
+            pnn.img = new Bitmap("guns/gun.jpeg");
+            pnn.img.MakeTransparent(pnn.img.GetPixel(0, 0));
+            gun.Add(pnn);
+
+            pnn = new CImageActor();
+            pnn.y = Eliot.Y + 15;
+            pnn.img = new Bitmap("guns/gun2.jpeg");
+            pnn.x = Eliot.X - 30;
+            pnn.img.MakeTransparent(pnn.img.GetPixel(0, 0));
+            gun.Add(pnn);
+         }
+        void Create_Bullets()
+        {
+            CImageActor pnn = new CImageActor();
+            switch (igun)
             {
-                CImageActor pnn = new CImageActor();
-                pnn.x = Eliot.X + Eliot.frames[0].Width - 17;
-                pnn.y = Eliot.Y + 15;
-                pnn.img = new Bitmap("guns/gun.jpeg");
-                pnn.img.MakeTransparent(pnn.img.GetPixel(0, 0));
-                gun.Add(pnn);
-
-                pnn = new CImageActor();
-                pnn.y = Eliot.Y + 15;
-                pnn.img = new Bitmap("guns/gun2.jpeg");
-                pnn.x = Eliot.X - 30;
-                pnn.img.MakeTransparent(pnn.img.GetPixel(0, 0));
-                gun.Add(pnn);
+                case 0:
+                    pnn.x = gun[0].x + 50;
+                    pnn.y = gun[0].y;
+                    pnn.img = new Bitmap("guns/bullet.png");
+                    pnn.dir = 1;
+                    break;
+                case 1:
+                    pnn.x = gun[1].x - 10;
+                    pnn.y = gun[1].y;
+                    pnn.img = new Bitmap("guns/bullet2.png");
+                    pnn.dir = -1;
+                    break;
             }
-            void Create_Bullets()
+            pnn.islife = true;
+            bullets.Add(pnn);
+        }
+        void MoveBullets()
+        {
+            for (int i = 0; i < bullets.Count; i++)
             {
-                CImageActor pnn = new CImageActor();
-                switch (igun)
-                {
-                    case 0:
-                        pnn.x = gun[0].x + 50;
-                        pnn.y = gun[0].y;
-                        pnn.img = new Bitmap("guns/bullet.png");
-                        pnn.dir = 1;
-                        break;
-                    case 1:
-                        pnn.x = gun[1].x - 10;
-                        pnn.y = gun[1].y;
-                        pnn.img = new Bitmap("guns/bullet2.png");
-                        pnn.dir = -1;
-                        break;
-                }
-                pnn.islife = true;
-                bullets.Add(pnn);
+                bullets[i].x += (10 * bullets[i].dir);
             }
-            void MoveBullets()
+            if (singleBullet.islife)
             {
-                for (int i = 0; i < bullets.Count; i++)
-                {
-                    bullets[i].x += (10 * bullets[i].dir);
-                }
+                singleBullet.x += (10 * singleBullet.dir);
             }
+        }
 
-            void create_Hero()
-            {
-                Eliot.frames = new List<Bitmap>();
-                Eliot.X = 150;
-                Eliot.Y = 260;
-                //if Hero walks forward state =0
-                Bitmap img = new Bitmap("Heros/Frames/walk/HeroW1.png");
-                img.MakeTransparent(img.GetPixel(0, 0));
-                Eliot.frames.Add(img);
-                img = new Bitmap("Heros/Frames/walk/HeroW2.png");
-                img.MakeTransparent(img.GetPixel(0, 0));
-                Eliot.frames.Add(img);
-                img = new Bitmap("Heros/Frames/walk/HeroW3.png");
-                img.MakeTransparent(img.GetPixel(0, 0));
-                Eliot.frames.Add(img);
-                img = new Bitmap("Heros/Frames/walk/HeroW4.png");
-                img.MakeTransparent(img.GetPixel(0, 0));
-                Eliot.frames.Add(img);
-                //if Hero walks back state =1
-                img = new Bitmap("Heros/Frames/walk/HeroW1rev.png");
-                img.MakeTransparent(img.GetPixel(0, 0));
-                Eliot.frames.Add(img);
-                img = new Bitmap("Heros/Frames/walk/HeroW2rev.png");
-                img.MakeTransparent(img.GetPixel(0, 0));
-                Eliot.frames.Add(img);
-                img = new Bitmap("Heros/Frames/walk/HeroW3rev.png");
-                img.MakeTransparent(img.GetPixel(0, 0));
-                Eliot.frames.Add(img);
-                img = new Bitmap("Heros/Frames/walk/HeroW4rev.png");
-                img.MakeTransparent(img.GetPixel(0, 0));
-                Eliot.frames.Add(img);
-                //if hero jumps(bases odam) hero state =2 
-                img = new Bitmap("Heros/Frames/jump/Hero1.png");
-                img.MakeTransparent(img.GetPixel(0, 0));
-                Eliot.frames.Add(img);
-                img = new Bitmap("Heros/Frames/jump/Hero2.png");
-                img.MakeTransparent(img.GetPixel(0, 0));
-                Eliot.frames.Add(img);
-                img = new Bitmap("Heros/Frames/jump/Hero3.png");
-                img.MakeTransparent(img.GetPixel(0, 0));
-                Eliot.frames.Add(img);
-                img = new Bitmap("Heros/Frames/jump/Hero4.png");
-                img.MakeTransparent(img.GetPixel(0, 0));
-                Eliot.frames.Add(img);
-                // if hero jumps(bases wara) hero state =3
-                img = new Bitmap("Heros/Frames/jump/Hero1rev.png");
-                img.MakeTransparent(img.GetPixel(0, 0));
-                Eliot.frames.Add(img);
-                img = new Bitmap("Heros/Frames/jump/Hero2rev.png");
-                img.MakeTransparent(img.GetPixel(0, 0));
-                Eliot.frames.Add(img);
-                img = new Bitmap("Heros/Frames/jump/Hero3rev.png");
-                img.MakeTransparent(img.GetPixel(0, 0));
-                Eliot.frames.Add(img);
-                img = new Bitmap("Heros/Frames/jump/Hero4rev.png");
-                img.MakeTransparent(img.GetPixel(0, 0));
-                Eliot.frames.Add(img);
+        void create_Hero()
+        {
+            Eliot.frames = new List<Bitmap>();
+            Eliot.X = 150;
+            Eliot.Y = 260;
+            //if Hero walks forward state =0
+            Bitmap img = new Bitmap("Heros/Frames/walk/HeroW1.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Eliot.frames.Add(img);
+            img = new Bitmap("Heros/Frames/walk/HeroW2.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Eliot.frames.Add(img);
+            img = new Bitmap("Heros/Frames/walk/HeroW3.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Eliot.frames.Add(img);
+            img = new Bitmap("Heros/Frames/walk/HeroW4.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Eliot.frames.Add(img);
+            //if Hero walks back state =1
+            img = new Bitmap("Heros/Frames/walk/HeroW1rev.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Eliot.frames.Add(img);
+            img = new Bitmap("Heros/Frames/walk/HeroW2rev.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Eliot.frames.Add(img);
+            img = new Bitmap("Heros/Frames/walk/HeroW3rev.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Eliot.frames.Add(img);
+            img = new Bitmap("Heros/Frames/walk/HeroW4rev.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Eliot.frames.Add(img);
+            //if hero jumps(bases odam) hero state =2 
+            img = new Bitmap("Heros/Frames/jump/Hero1.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Eliot.frames.Add(img);
+            img = new Bitmap("Heros/Frames/jump/Hero2.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Eliot.frames.Add(img);
+            img = new Bitmap("Heros/Frames/jump/Hero3.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Eliot.frames.Add(img);
+            img = new Bitmap("Heros/Frames/jump/Hero4.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Eliot.frames.Add(img);
+            // if hero jumps(bases wara) hero state =3
+            img = new Bitmap("Heros/Frames/jump/Hero1rev.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Eliot.frames.Add(img);
+            img = new Bitmap("Heros/Frames/jump/Hero2rev.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Eliot.frames.Add(img);
+            img = new Bitmap("Heros/Frames/jump/Hero3rev.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Eliot.frames.Add(img);
+            img = new Bitmap("Heros/Frames/jump/Hero4rev.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Eliot.frames.Add(img);
 
-                Eliot.state = 0;
-                Eliot.iFrame = 0;
+            Eliot.state = 0;
+            Eliot.iFrame = 0;
 
 
-            }
+        }
         void create_Tiles()
         {
             CImageActor pnn = new CImageActor();
@@ -634,7 +692,7 @@ namespace project
             int YS= wrld.rcSrc.Y*19/10;
             for (int i=0;i<bullets.Count;i++)
             {
-                    g.DrawImage(bullets[i].img, bullets[i].x, bullets[i].y, 45, 45);
+                    g.DrawImage(bullets[i].img, bullets[i].x, bullets[i].y, 50, 50);
             }
             for(int i=0;i<fixedObjects.Count;i++)
             {
@@ -643,6 +701,10 @@ namespace project
             for (int i = 0; i < fixedwalls.Count; i++)
             {
                 g.DrawImage(fixedwalls[i].img, fixedwalls[i].x - XS, fixedwalls[i].y - YS, fixedwalls[i].W, fixedwalls[i].H);
+            }
+            if(singleBullet.islife)
+            {
+                g.DrawImage(singleBullet.img, singleBullet.x, singleBullet.y,70,70);
             }
 
         }
