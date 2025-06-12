@@ -1,13 +1,13 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\Al-Saad\\MultiMedia_project\\project\\",
+  "WorkspaceRootPath": "C:\\Users\\minam\\MultiMedia_project\\project\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{E6C341B8-035C-4210-801F-D0692526491E}|project\\project.csproj|c:\\users\\al-saad\\multimedia_project\\project\\project\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{E6C341B8-035C-4210-801F-D0692526491E}|project\\project.csproj|c:\\users\\minam\\multimedia_project\\project\\project\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{E6C341B8-035C-4210-801F-D0692526491E}|project\\project.csproj|solutionrelative:project\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E6C341B8-035C-4210-801F-D0692526491E}|project\\project.csproj|C:\\Users\\Al-Saad\\MultiMedia_project\\project\\project\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "AbsoluteMoniker": "D:0:0:{E6C341B8-035C-4210-801F-D0692526491E}|project\\project.csproj|C:\\Users\\minam\\MultiMedia_project\\project\\project\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{E6C341B8-035C-4210-801F-D0692526491E}|project\\project.csproj|solutionrelative:project\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     }
   ],
@@ -36,11 +36,15 @@
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "Form1.cs",
-              "DocumentMoniker": "C:\\Users\\Al-Saad\\MultiMedia_project\\project\\project\\Form1.cs",
+              "DocumentMoniker": "C:\\Users\\minam\\MultiMedia_project\\project\\project\\Form1.cs",
               "RelativeDocumentMoniker": "project\\Form1.cs",
-              "ToolTip": "C:\\Users\\Al-Saad\\MultiMedia_project\\project\\project\\Form1.cs",
+              "ToolTip": "C:\\Users\\minam\\MultiMedia_project\\project\\project\\Form1.cs",
               "RelativeToolTip": "project\\Form1.cs",
+<<<<<<< HEAD
               "ViewState": "AgIAAN4CAAAAAAAAAAA5wAMDAAAAAAAAAAAAAA==",
+=======
+              "ViewState": "AgIAAA8DAAAAAAAAAAAwwCUDAAAAAAAAAAAAAA==",
+>>>>>>> c21847997eb462d1c7adbeed82dba4acb60b6a2b
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-30T20:25:12.163Z",
               "EditorCaption": ""
@@ -49,10 +53,10 @@
               "$type": "Document",
               "DocumentIndex": 1,
               "Title": "Form1.cs [Design]",
-              "DocumentMoniker": "C:\\Users\\Al-Saad\\MultiMedia_project\\project\\project\\Form1.cs",
+              "DocumentMoniker": "C:\\Users\\minam\\MultiMedia_project\\project\\project\\Form1.cs",
               "RelativeDocumentMoniker": "project\\Form1.cs",
               "ToolTip": "C:\\Users\\Al-Saad\\MultiMedia_project\\project\\project\\Form1.cs [Design]",
-              "RelativeToolTip": "project\\Form1.cs [Design]",
+              "RelativeToolTip": "..\\..\\..\\Al-Saad\\MultiMedia_project\\project\\project\\Form1.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-30T20:25:08.443Z"
             }
