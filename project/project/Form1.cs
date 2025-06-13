@@ -50,6 +50,7 @@ namespace project
         List<CMultiImgActor> bomb = new List<CMultiImgActor>();
         List<CMultiImgActor> enemies = new List<CMultiImgActor>();
         CImageActor singleBullet = new CImageActor();
+        CImageActor Elevator = new CImageActor();
         CMultiImgActor Laser=new CMultiImgActor();
         int ct = 0;
         int ctTick = 0;
@@ -62,6 +63,9 @@ namespace project
         CImageActor pnn2 = new CImageActor();
         int ctLaser;
         bool laserdmg = false;
+        int dirElevtorX;
+        bool elevator;
+        bool elevator2;
         //Rectangle temp;
         //Rectangle temp2;
         public Form1()
@@ -84,7 +88,7 @@ namespace project
             create_Tiles();
 
             Create_Enemy();
-
+            Create_Elevator();
             create_laser();
 
         }
@@ -117,185 +121,120 @@ namespace project
             move_enemy();
             CheckB();
             Handle_bomb();
+            ElevatorHandle();
             ctTick++;
             DrawDubb(this.CreateGraphics());
         }
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-            switch (e.KeyCode) //scrolling logic
+            if (!elevator)
             {
-                case Keys.D:
-                    Eliot.state = 0;
-                    if (wrld.rcSrc.X + wrld.rcSrc.Width <= wrld.wrld.Width - 3 && Eliot.X >= (ClientSize.Width / 2) - 100)
-                    {
-                         speed = 0;
-                         wrld.rcSrc.X += 6;
-                    }
-                    else
-                    {
-                        speed = 6;
-                    }
-                    if (Eliot.X  <= ClientSize.Width - Eliot.frames[Eliot.iFrame].Width)
-                    {
-                        // Eliot.X += 2;
-                        if (Eliot.X <= ClientSize.Width)
+                switch (e.KeyCode) //scrolling logic
+                {
+                    case Keys.D:
+                        Eliot.state = 0;
+                        if (wrld.rcSrc.X + wrld.rcSrc.Width <= wrld.wrld.Width - 3 && Eliot.X >= (ClientSize.Width / 2) - 100)
                         {
-                            Eliot.X += speed;
-
-                        }
-                        if (Eliot.iFrame < 3)
-                        {
-                            if (ct % 4 == 0)
-                            {
-                                Eliot.iFrame++;
-
-                            }
-                            ct++;
+                            speed = 0;
+                            wrld.rcSrc.X += 6;
                         }
                         else
                         {
-                            Eliot.iFrame = 0;
+                            speed = 6;
                         }
-                    }
-                    break;
-
-                case Keys.A:
-                    if(Eliot.state==0)
-                    {
-                        Eliot.iFrame = 4;
-
-                    }
-                    Eliot.state = 1;
-                    if (wrld.rcSrc.X > 3)
-                    {
-                        if (Eliot.X <= ClientSize.Width / 2)
+                        if (Eliot.X <= ClientSize.Width - Eliot.frames[Eliot.iFrame].Width)
                         {
-                            wrld.rcSrc.X -= 6;
-                            speed2 = 0;
-                        }
-
-                    }
-                    else
-                    {
-                        speed2 = 6;
-                    }
-                    if (Eliot.X >= 0)
-                    {
-                        Eliot.X -= speed2;
-                    }
-                    
-                    if (Eliot.X >= 0)
-                    { 
-                            Eliot.X -= 2;
-                        
-                        if (Eliot.iFrame < 7)
-                        {
-                            if (ct % 4 == 0)
+                            // Eliot.X += 2;
+                            if (Eliot.X <= ClientSize.Width)
                             {
-                                Eliot.iFrame++;
+                                Eliot.X += speed;
 
                             }
-                            ct++;
+                            if (Eliot.iFrame < 3)
+                            {
+                                if (ct % 4 == 0)
+                                {
+                                    Eliot.iFrame++;
+
+                                }
+                                ct++;
+                            }
+                            else
+                            {
+                                Eliot.iFrame = 0;
+                            }
                         }
-                        else
+                        break;
+
+                    case Keys.A:
+                        if (Eliot.state == 0)
                         {
                             Eliot.iFrame = 4;
+
                         }
-                    }
-                    break;
-
-                case Keys.W:
-                    if (wrld.rcSrc.Y >= 0 && !Eliot.gravity &&Eliot.Y>=y)
-                    {
-                         Eliot.Y -= 20; Eliot.gravity = true;
-                    }
-                    else if (Eliot.Y < y)
-                    {
-                        Eliot.Y = y;
-                        Eliot.gravity = false;
-                    }
-                    break;
-
-                case Keys.S:
-                    if (wrld.rcSrc.Y + wrld.rcSrc.Height <= wrld.wrld.Height)
-                        wrld.rcSrc.Y += 2;
-                    break;
-
-                case Keys.Q:
-                    igun = 1;
-                    if (wrld.rcSrc.Y >= 0 && !Eliot.gravity &&Eliot.Y>=y)
-                    {
-                       
-                        Eliot.Y -= 20;
-                        //Eliot.X -= 10;
-                        Eliot.gravity = true;
-                    }
-                    else if (Eliot.Y < y)
-                    {
-                        Eliot.Y = y;
-                        Eliot.gravity = false;
-                    }
-                    if (wrld.rcSrc.X >= 0)
-                    {
-                        if (Eliot.X <= ClientSize.Width / 2 && Eliot.Y >= y)
-                        {
-                            wrld.rcSrc.X -= 10;
-                            speed2 = 0;
-                        }
-
-                    }
-                    else
-                    {
-                        speed2 = 10;
-                    }
-                    if (Eliot.X >= 0 )
-                    {
-                        Eliot.X -= speed2;
-                    }
-                    if (Eliot.X >= 0)
-                    {
-                        // Eliot.X -= 2;
                         Eliot.state = 1;
-                        if (Eliot.iFrame < 7)
+                        if (wrld.rcSrc.X > 3)
                         {
-                            if (ct % 4 == 0)
+                            if (Eliot.X <= ClientSize.Width / 2)
                             {
-                                Eliot.iFrame++;
+                                wrld.rcSrc.X -= 6;
+                                speed2 = 0;
                             }
-                            ct++;
+
                         }
                         else
                         {
-                            Eliot.iFrame = 4;
-
+                            speed2 = 6;
                         }
-                    }
-                    break;
-
-                case Keys.E:
-                    igun = 0;
-                    if (wrld.rcSrc.X + wrld.rcSrc.Width <= wrld.wrld.Width && Eliot.X >= (ClientSize.Width / 2) - 100 && Eliot.Y >= y)
-                    {
-                        speed = 0;
-                        wrld.rcSrc.X += 10;
-                    }
-                    else
-                    {
-                        speed = 10;
-                    }
-                    if (Eliot.X <= ClientSize.Width - Eliot.frames[Eliot.iFrame].Width)
-                    {
-                        // Eliot.X += 2;
-                        if (Eliot.X <= ClientSize.Width && Eliot.Y >= y)
+                        if (Eliot.X >= 0)
                         {
-                            Eliot.X += speed;
-
+                            Eliot.X -= speed2;
                         }
-                        if (wrld.rcSrc.Y >= 0 && !Eliot.gravity && Eliot.Y>=y)
+
+                        if (Eliot.X >= 0)
+                        {
+                            Eliot.X -= 2;
+
+                            if (Eliot.iFrame < 7)
+                            {
+                                if (ct % 4 == 0)
+                                {
+                                    Eliot.iFrame++;
+
+                                }
+                                ct++;
+                            }
+                            else
+                            {
+                                Eliot.iFrame = 4;
+                            }
+                        }
+                        break;
+
+                    case Keys.W:
+                        if (wrld.rcSrc.Y >= 0 && !Eliot.gravity && Eliot.Y >= y)
+                        {
+                            Eliot.Y -= 20; Eliot.gravity = true;
+                        }
+                        else if (Eliot.Y < y)
+                        {
+                            Eliot.Y = y;
+                            Eliot.gravity = false;
+                        }
+                        break;
+
+                    case Keys.S:
+                        if (wrld.rcSrc.Y + wrld.rcSrc.Height <= wrld.wrld.Height)
+                            wrld.rcSrc.Y += 2;
+                        break;
+
+                    case Keys.Q:
+                        igun = 1;
+                        if (wrld.rcSrc.Y >= 0 && !Eliot.gravity && Eliot.Y >= y)
                         {
 
                             Eliot.Y -= 20;
-                            Eliot.X += speed;
+                            //Eliot.X -= 10;
                             Eliot.gravity = true;
                         }
                         else if (Eliot.Y < y)
@@ -303,34 +242,103 @@ namespace project
                             Eliot.Y = y;
                             Eliot.gravity = false;
                         }
-                        if (Eliot.iFrame < 3)
+                        if (wrld.rcSrc.X >= 0)
                         {
-                            if (ct % 4 == 0)
+                            if (Eliot.X <= ClientSize.Width / 2 && Eliot.Y >= y)
                             {
-                                Eliot.iFrame++;
-
+                                wrld.rcSrc.X -= 10;
+                                speed2 = 0;
                             }
-                            ct++;
+
                         }
                         else
                         {
-                            Eliot.iFrame = 1;
+                            speed2 = 10;
                         }
-                    }
-                    break;
+                        if (Eliot.X >= 0)
+                        {
+                            Eliot.X -= speed2;
+                        }
+                        if (Eliot.X >= 0)
+                        {
+                            // Eliot.X -= 2;
+                            Eliot.state = 1;
+                            if (Eliot.iFrame < 7)
+                            {
+                                if (ct % 4 == 0)
+                                {
+                                    Eliot.iFrame++;
+                                }
+                                ct++;
+                            }
+                            else
+                            {
+                                Eliot.iFrame = 4;
+
+                            }
+                        }
+                        break;
+
+                    case Keys.E:
+                        igun = 0;
+                        if (wrld.rcSrc.X + wrld.rcSrc.Width <= wrld.wrld.Width && Eliot.X >= (ClientSize.Width / 2) - 100 && Eliot.Y >= y)
+                        {
+                            speed = 0;
+                            wrld.rcSrc.X += 10;
+                        }
+                        else
+                        {
+                            speed = 10;
+                        }
+                        if (Eliot.X <= ClientSize.Width - Eliot.frames[Eliot.iFrame].Width)
+                        {
+                            // Eliot.X += 2;
+                            if (Eliot.X <= ClientSize.Width && Eliot.Y >= y)
+                            {
+                                Eliot.X += speed;
+
+                            }
+                            if (wrld.rcSrc.Y >= 0 && !Eliot.gravity && Eliot.Y >= y)
+                            {
+
+                                Eliot.Y -= 20;
+                                Eliot.X += speed;
+                                Eliot.gravity = true;
+                            }
+                            else if (Eliot.Y < y)
+                            {
+                                Eliot.Y = y;
+                                Eliot.gravity = false;
+                            }
+                            if (Eliot.iFrame < 3)
+                            {
+                                if (ct % 4 == 0)
+                                {
+                                    Eliot.iFrame++;
+
+                                }
+                                ct++;
+                            }
+                            else
+                            {
+                                Eliot.iFrame = 1;
+                            }
+                        }
+                        break;
                     case Keys.Space:
                         Create_Bullets();
-                    break;
-                case Keys.X:
-                    if(!singleBullet.islife)
-                    {
-                        Create_SB(); 
-                    }
-                    break;
-                case Keys.L:
-                    Eliot.Y -= 10;
-                    wrld.rcSrc.Y -= 10;
-                    break;
+                        break;
+                    case Keys.X:
+                        if (!singleBullet.islife)
+                        {
+                            Create_SB();
+                        }
+                        break;
+                    case Keys.L:
+                        Eliot.Y -= 10;
+                        wrld.rcSrc.Y -= 10;
+                        break;
+                }
             }
             movegun();
             MoveBullets();
@@ -340,7 +348,8 @@ namespace project
             enemyhandle();
             move_enemy();
             Handle_bomb();
-            ctTick++;
+            ElevatorHandle();
+
             DrawDubb(this.CreateGraphics());
         }
         void Create_Enemy()
@@ -666,7 +675,58 @@ namespace project
                 singleBullet.x += (10 * singleBullet.dir);
             }
         }
-
+        void Create_Elevator()
+        {
+            Elevator.img = new Bitmap("Assets/elvator.png");
+            Elevator.img.MakeTransparent(Elevator.img.GetPixel(0, 0));
+            Elevator.x = 510 + wrld.rcSrc.X;
+            Elevator.y = 100 + wrld.rcSrc.Y;
+            Elevator.W = 150;
+            Elevator.H = 90;
+        }
+        void ElevatorHandle()
+        {
+            int XS = wrld.rcSrc.X * 19/10;
+            int YS = wrld.rcSrc.Y * 19/10;
+            if (Elevator.x == 50 + wrld.rcSrc.X && !elevator2)
+            {
+                Elevator.dir = -1;
+                dirElevtorX = 0;
+            }
+            if((Eliot.X <=Elevator.x +Elevator.W - 60 -XS && Eliot.X>=Elevator.x - XS)
+                && !elevator
+                && (Eliot.Y <= Elevator.y - Eliot.frames[Eliot.iFrame].Height+ 10 - YS) && !elevator2)
+            {
+                dirElevtorX = -1;
+                Elevator.dir = 0;
+                elevator = true;
+                
+            }
+            if(Elevator.y <= 250 )
+            {
+                y = Eliot.Y;
+                Elevator.dir = 0;
+                elevator = false;
+                elevator2 = true;
+            }
+            Elevator.x += (5 * dirElevtorX);
+            Elevator.y += (4*Elevator.dir);
+            if(elevator)
+            {       
+                Eliot.X = Elevator.x + 80 -XS;
+                if(wrld.rcSrc.X > 0) 
+                { 
+                     wrld.rcSrc.X += (2 * dirElevtorX);
+                }
+                if(wrld.rcSrc.Y>0)
+                {
+                    wrld.rcSrc.Y += (2 * Elevator.dir);
+                }
+                
+                Eliot.Y = Elevator.y - Eliot.frames[Eliot.iFrame].Height-YS +10;
+            }
+          
+        }
         void create_Hero()
         {
             Eliot.frames = new List<Bitmap>();
@@ -917,6 +977,7 @@ namespace project
               
                     g.DrawImage(bomb[i].frames[bomb[i].iFrame], bomb[i].X - XS, bomb[i].Y - YS, 70, 70);
             }
+            g.DrawImage(Elevator.img, Elevator.x - XS, Elevator.y - YS,Elevator.W,Elevator.H);
         }
         void DrawDubb(Graphics g)
         {
