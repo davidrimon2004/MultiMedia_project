@@ -47,6 +47,7 @@ namespace project
         List<CImageActor> bullets = new List<CImageActor>();
         List<CImageActor> fixedObjects = new List<CImageActor>();
         List<CImageActor> fixedwalls = new List<CImageActor>();
+        List<CMultiImgActor> bomb = new List<CMultiImgActor>();
         List<CMultiImgActor> enemies = new List<CMultiImgActor>();
         CImageActor singleBullet = new CImageActor();
         CMultiImgActor Laser=new CMultiImgActor();
@@ -81,11 +82,11 @@ namespace project
             create_Hero();
             create_gun();
             create_Tiles();
-<<<<<<< HEAD
+
             Create_Enemy();
-=======
+
             create_laser();
->>>>>>> c21847997eb462d1c7adbeed82dba4acb60b6a2b
+
         }
         private void Tt_Tick(object sender, EventArgs e)
         {
@@ -104,7 +105,10 @@ namespace project
                 }
             }
             igun = Eliot.state;
-           
+            if (ctTick%30 == 0)
+            {
+                Create_Bomb();
+            }
             animateLaser();
             movegun();
             MoveBullets();
@@ -112,6 +116,7 @@ namespace project
             enemyhandle();
             move_enemy();
             CheckB();
+            Handle_bomb();
             ctTick++;
             DrawDubb(this.CreateGraphics());
         }
@@ -334,6 +339,8 @@ namespace project
             CheckB();
             enemyhandle();
             move_enemy();
+            Handle_bomb();
+            ctTick++;
             DrawDubb(this.CreateGraphics());
         }
         void Create_Enemy()
@@ -353,15 +360,16 @@ namespace project
         }
         void enemyhandle()
         {
-            if (enemies[0].X >= 400 + wrld.rcSrc.X || enemies[0].X <= 5 + wrld.rcSrc.X)
+            int XS = wrld.rcSrc.X ;
+            if (enemies[0].X >= 400  || enemies[0].X <= 5 )
             {
                 enemies[0].Dir *= -1;
             }
-            if (enemies[0].X <= 5 + wrld.rcSrc.X || enemies[0].iFrame == 3)
+            if (enemies[0].X <= 5  || enemies[0].iFrame == 3)
             {
                 enemies[0].iFrame = 0;
             }
-            if (enemies[0].X >= 400 + wrld.rcSrc.X || enemies[0].iFrame == 7)
+            if (enemies[0].X >= 400 || enemies[0].iFrame == 7)
             {
                 enemies[0].iFrame = 4;
             }
@@ -380,7 +388,58 @@ namespace project
                 }
             }
         }
+        void Create_Bomb()
+        {
+            CMultiImgActor pnn = new CMultiImgActor();
+            pnn.frames= new List<Bitmap>();
 
+            Bitmap img = new Bitmap("enemies/ship_frames/Bomb/bomb.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            pnn.frames.Add(img);
+
+            img = new Bitmap("enemies/ship_frames/Bomb/bomb2.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            pnn.frames.Add(img);
+
+            pnn.X = enemies[0].X + enemies[0].frames[0].Width / 2   ;
+            pnn.Y = enemies[0].Y + enemies[0].frames[0].Height / 2 ;
+            bomb.Add(pnn);
+        }
+        void Handle_bomb()
+        {
+            for (int i = 0; i < bomb.Count; i++)
+            {
+                if (bomb[i].Y<= 200)
+                {
+                     bomb[i].Y += 3;
+                }
+                else
+                {
+                    bomb.RemoveAt(i);
+                    break;
+                }
+                if (bomb[i].Y>=197)
+                {
+                    bomb[i].iFrame = 1;
+                }
+                int XS = wrld.rcSrc.X * 19 / 10;
+                int YS = wrld.rcSrc.Y * 19 / 10;
+                if (Eliot.X <= bomb[i].X - XS + 80 && Eliot.X >= bomb[i].X - 20 - XS &&   Eliot.Y <= bomb[i].Y +60 - YS)
+                {
+                    
+                    if (Eliot.state == 0)
+                    {
+                        Eliot.X -= 100;
+                       
+                    }
+                    else
+                    {
+                        Eliot.X += 100;
+                        
+                    }
+                }
+            }
+        }
         void CheckB()
         {
             int XS = wrld.rcSrc.X * 19 / 10;
@@ -842,18 +901,22 @@ namespace project
             {
                 g.DrawImage(singleBullet.img, singleBullet.x, singleBullet.y,70,70);
             }
-<<<<<<< HEAD
+
             for(int i=0;i<enemies.Count; i++)
             {
                 g.DrawImage(enemies[i].frames[enemies[i].iFrame], enemies[i].X - XS, enemies[i].Y - YS);
             }
-=======
+
             if(Laser.state==1)
             {
                 g.DrawImage(Laser.frames[Laser.iFrame],Laser.X - XS, Laser.Y - YS, 130,150);
             }
 
->>>>>>> c21847997eb462d1c7adbeed82dba4acb60b6a2b
+            for(int i = 0; i < bomb.Count; i++)
+            {
+              
+                    g.DrawImage(bomb[i].frames[bomb[i].iFrame], bomb[i].X - XS, bomb[i].Y - YS, 70, 70);
+            }
         }
         void DrawDubb(Graphics g)
         {
