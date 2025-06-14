@@ -29,6 +29,7 @@ namespace project
         public int state;
         public bool gravity;
         public int HP;
+        public int W, H;
     }
     public class CImageActor
     {
@@ -54,6 +55,9 @@ namespace project
         CImageActor Elevator = new CImageActor();
         CMultiImgActor Laser=new CMultiImgActor();
         CMultiImgActor HP=new CMultiImgActor();
+        CMultiImgActor Boss=new CMultiImgActor();
+        CMultiImgActor enemy2 = new CMultiImgActor();
+        CImageActor ladder=new CImageActor();
         int ct = 0;
         int ctTick = 0;
         Bitmap iff;
@@ -70,6 +74,8 @@ namespace project
         bool elevator2;
         int oldHP = 5,cttickDMG=0;
         bool flagjump = false;
+        bool bossdmg = false;
+        bool ladderFlag = false;
         //Rectangle temp;
         //Rectangle temp2;
         public Form1()
@@ -95,7 +101,9 @@ namespace project
             Create_Elevator();
             create_laser();
             create_HPBAr();
-
+            createBoss();
+            create_enemy2();
+            CreateLadder();
         }
         private void Tt_Tick(object sender, EventArgs e)
         {
@@ -217,6 +225,8 @@ namespace project
             enemyhandle();
             move_enemy();
             CheckB();
+            animateBoss();
+            AnimateEnemy2();
             Handle_bomb();
             ElevatorHandle();
             ctTick++;
@@ -226,6 +236,7 @@ namespace project
         {
             int YS = wrld.rcSrc.Y;
             int XS = wrld.rcSrc.X;
+            LadderHandle();
             if (!elevator)
             {
                     switch (e.KeyCode) //scrolling logic
@@ -311,42 +322,55 @@ namespace project
                             }
                             break;
 
-                        case Keys.W:
+                    case Keys.W:
                         flagjump = true;
                         ctjump = 0;
-                             if (!Eliot.gravity)
-                             {
-                                 //if (wrld.rcSrc.Y >= 0 && !Eliot.gravity && Eliot.Y >= y - YS)
-                                 //{
-                                 //    //wrld.rcSrc.Y -= 20;
-                                 //    //Eliot.Y -= 50;
-                                 //    Eliot.gravity = true;
-                                 //}
+                        if (!Eliot.gravity && !ladderFlag)
+                        {
+                            //if (wrld.rcSrc.Y >= 0 && !Eliot.gravity && Eliot.Y >= y - YS)
+                            //{
+                            //    //wrld.rcSrc.Y -= 20;
+                            //    //Eliot.Y -= 50;
+                            //    Eliot.gravity = true;
+                            //}
 
-                                 if (!Eliot.gravity)
-                                 {
-                                     if (Eliot.state == 0)
-                                     {
-                                         Eliot.state = 2;
-                                     }
-                                     if (Eliot.state == 1)
-                                     {
-                                         Eliot.state = 3;
-                                     }
-                                     Eliot.gravity = true;
+                            if (!Eliot.gravity)
+                            {
+                                if (Eliot.state == 0)
+                                {
+                                    Eliot.state = 2;
+                                }
+                                if (Eliot.state == 1)
+                                {
+                                    Eliot.state = 3;
+                                }
+                                Eliot.gravity = true;
 
-                                 }
-                                 else if (Eliot.Y < y - YS)
-                                 {
-                                     //Eliot.Y = y - YS;
-                                     //wrld.rcSrc.Y += 20;
-                                     // Eliot.gravity = false;
-                                 }
-                             }
-                        
+                            }
+                            else if (Eliot.Y < y - YS)
+                            {
+                                //Eliot.Y = y - YS;
+                                //wrld.rcSrc.Y += 20;
+                                // Eliot.gravity = false;
+                            }
+                        }
+                        else if (ladderFlag)
+                        {
+                            Eliot.Y -= 4;
+                            wrld.rcSrc.Y -= 4;
+                            if (Eliot.state == 0)
+                            {
+                                Eliot.iFrame = 8;
+                            }
+                            else if (Eliot.state == 1)
+                            {
+                                Eliot.iFrame = 12;
+                            }
+                        }
+
                         break;
 
-                        case Keys.S:
+                    case Keys.S:
 
                             if (Eliot.Y < y - YS)
                             {
@@ -563,6 +587,344 @@ namespace project
                 }
             }
         }
+        void createBoss()
+        {
+            Boss.frames = new List<Bitmap>();
+            Boss.iFrame = 0;
+            //boss state =0 idle
+            Boss.state = 0;
+            Bitmap img = new Bitmap("enemies/Boss/idle/frame_092_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0,0));
+            Boss.frames.Add(img);
+            img = new Bitmap("enemies/Boss/idle/frame_093_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img); img = new Bitmap("enemies/Boss/idle/frame_094_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img); img = new Bitmap("enemies/Boss/idle/frame_095_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img); img = new Bitmap("enemies/Boss/idle/frame_096_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img); img = new Bitmap("enemies/Boss/idle/frame_097_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img); img = new Bitmap("enemies/Boss/idle/frame_098_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img); img = new Bitmap("enemies/Boss/idle/frame_099_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img); img = new Bitmap("enemies/Boss/idle/frame_100_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img); img = new Bitmap("enemies/Boss/idle/frame_101_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img); img = new Bitmap("enemies/Boss/idle/frame_102_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img); img = new Bitmap("enemies/Boss/idle/frame_103_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img); img = new Bitmap("enemies/Boss/idle/frame_104_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img); img = new Bitmap("enemies/Boss/idle/frame_105_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img); img = new Bitmap("enemies/Boss/idle/frame_106_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img); img = new Bitmap("enemies/Boss/idle/frame_107_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img);
+            img = new Bitmap("enemies/Boss/idle/frame_108_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img); img = new Bitmap("enemies/Boss/idle/frame_109_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img);
+            //this part ends at i=17
+
+            //boss state = 1 shoots when Eliot is close
+
+            img = new Bitmap("enemies/Boss/shooting/frame_072_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img);
+            img = new Bitmap("enemies/Boss/shooting/frame_073_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img);
+            img = new Bitmap("enemies/Boss/shooting/frame_074_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img);
+            img = new Bitmap("enemies/Boss/shooting/frame_075_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img);
+            img = new Bitmap("enemies/Boss/shooting/frame_076_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img);
+            img = new Bitmap("enemies/Boss/shooting/frame_077_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img);
+            img = new Bitmap("enemies/Boss/shooting/frame_090_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img);
+            img = new Bitmap("enemies/Boss/shooting/frame_091_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img);
+            // this part ends at i=25
+
+            //state=2 boss is getting shot at
+            img = new Bitmap("enemies/Boss/shot/frame_017_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img);
+            img = new Bitmap("enemies/Boss/shot/frame_018_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img); img = new Bitmap("enemies/Boss/shot/frame_019_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img); img = new Bitmap("enemies/Boss/shot/frame_020_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img); img = new Bitmap("enemies/Boss/shot/frame_021_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img); img = new Bitmap("enemies/Boss/shot/frame_022_delay-0.08s.gif");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img); img = new Bitmap("enemies/Boss/shot/frame_023_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img); img = new Bitmap("enemies/Boss/shot/frame_024_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img); img = new Bitmap("enemies/Boss/shot/frame_025_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img); img = new Bitmap("enemies/Boss/shot/frame_026_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img); img = new Bitmap("enemies/Boss/shot/frame_027_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img); img = new Bitmap("enemies/Boss/shot/frame_028_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img); img = new Bitmap("enemies/Boss/shot/frame_029_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img); img = new Bitmap("enemies/Boss/shot/frame_030_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img); img = new Bitmap("enemies/Boss/shot/frame_031_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img); img = new Bitmap("enemies/Boss/shot/frame_032_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            img = new Bitmap("enemies/Boss/shot/frame_034_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img); img = new Bitmap("enemies/Boss/shot/frame_035_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img); img = new Bitmap("enemies/Boss/shot/frame_036_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img); img = new Bitmap("enemies/Boss/shot/frame_037_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img); img = new Bitmap("enemies/Boss/shot/frame_038_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img); img = new Bitmap("enemies/Boss/shot/frame_039_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img);
+            img = new Bitmap("enemies/Boss/shot/frame_040_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img);
+            // this ends at i= 47
+
+            //state =3 Boss is defeated
+            img = new Bitmap("enemies/Boss/K.O/frame_164_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img);
+            img = new Bitmap("enemies/Boss/K.O/frame_165_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img); img = new Bitmap("enemies/Boss/K.O/frame_166_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img); img = new Bitmap("enemies/Boss/K.O/frame_167_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img); img = new Bitmap("enemies/Boss/K.O/frame_168_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img); img = new Bitmap("enemies/Boss/K.O/frame_169_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img); img = new Bitmap("enemies/Boss/K.O/frame_170_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img); img = new Bitmap("enemies/Boss/K.O/frame_171_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img); img = new Bitmap("enemies/Boss/K.O/frame_172_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img); img = new Bitmap("enemies/Boss/K.O/frame_173_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img); img = new Bitmap("enemies/Boss/K.O/frame_174_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img); img = new Bitmap("enemies/Boss/K.O/frame_175_delay-0.08s.png");
+            img.MakeTransparent(img.GetPixel(0, 0));
+            Boss.frames.Add(img);
+            //this ends at i=59;
+            //list.Count should be 60
+            Boss.X = 1770 + wrld.rcSrc.Width;
+            Boss.Y=435+wrld.rcSrc.Height;
+            Boss.H = 270;
+            Boss.W = 270;
+            Boss.HP = 4;
+        }
+        void animateBoss()
+        {
+            int XS = wrld.rcSrc.X * 19 / 10;
+            int YS = wrld.rcSrc.Y * 19 / 10;
+            if (ctTick % 2 == 0)
+            {
+                if (Boss.state == 0)
+                {
+                    Boss.iFrame++;
+                    if (Boss.iFrame > 17)
+                    {
+                        Boss.iFrame = 0;
+                    }
+                }
+                if (Boss.state == 1)
+                {
+                    if (Boss.iFrame < 18 || Boss.iFrame > 25)
+                    {
+                        Boss.iFrame = 18;
+                    }
+                    else
+                    {
+                        Boss.iFrame++;
+                    }
+                }
+                if (Boss.state == 2)
+                {
+                    if (Boss.iFrame < 25 || Boss.iFrame > 47)
+                    {
+                        Boss.iFrame = 25;
+                    }
+                    else
+                    {
+                        Boss.iFrame++;
+                    }
+                }
+                if (Boss.state == 3)
+                {
+                    if (Boss.iFrame < 47)
+                    {
+                        Boss.iFrame = 48;
+                    }
+                    else if(Boss.iFrame<Boss.frames.Count-1)
+                    {
+                        Boss.iFrame++;
+                    }
+                }
+            }
+            if(Eliot.X>Boss.X-XS-300 && Eliot.Y>Boss.Y-YS&& Boss.state!=3)
+            {
+                Boss.state = 1;
+                if(!Eliot.gravity&&Boss.iFrame==24)
+                {
+                    Eliot.HP--;
+                }
+            }
+            else if(Eliot.X<Boss.X-XS-300 && Boss.state != 3)
+            {
+                Boss.state = 0;
+            }
+            for(int i=0;i<bullets.Count;i++)
+            {
+                if (bullets[i].x > Boss.X - XS  && bullets[i].y>Boss.Y-YS && Boss.state != 3)
+                {
+                    Boss.state = 2;
+                    bossdmg = true;
+                    if(bossdmg==true)
+                    {
+                        Boss.HP--;
+                        bossdmg=false;
+                    }
+                }
+            }
+            if(singleBullet.x>Boss.X-XS&&singleBullet.y>Boss.Y-YS && Boss.state != 3)
+            {
+                Boss.state = 2;
+                bossdmg = true;
+                if (bossdmg == true)
+                {
+                    Boss.HP--;
+                    bossdmg = false;
+                }
+            }
+            if (Boss.HP == 0)
+            {
+                Boss.state = 3;
+            }
+
+        }
+        void create_enemy2()
+        { 
+            enemy2.frames = new List<Bitmap>();
+            Bitmap img;
+            for (int i = 1; i < 10; i++)
+            {
+                img = new Bitmap("enemies/enemy2/" + i + ".png");
+                img.MakeTransparent(img.GetPixel(0, 0));
+                enemy2.frames.Add(img);
+            }
+            enemy2.state = 0;
+            enemy2.X = 500 + wrld.rcSrc.Width;
+            enemy2.Y= -50+wrld.rcSrc.Height;
+            enemy2.W = 200;
+            enemy2.H = 200;
+            //state 0 ,,,,, still
+            //state 1 ......walking
+            //state 2 still and shooting
+        }
+        void AnimateEnemy2()
+        {
+            int XS = wrld.rcSrc.X * 19 / 10;
+            int YS = wrld.rcSrc.Y * 19 / 10;
+            if (Eliot.X < enemy2.X + 400 )
+            {
+                enemy2.state = 1;
+            }
+            else if(Eliot.X>enemy2.X-400)
+            {
+                enemy2.state = 2;
+            }
+            if (ctTick % 3 == 0)
+            {
+                if (enemy2.state == 1)
+                {
+                    enemy2.iFrame++;
+                    if (enemy2.iFrame > 8)
+                    {
+                        enemy2.iFrame = 0;
+                    }
+                    if (enemy2.X > 600)
+                    {
+                        enemy2.state = 0;
+                    }
+                    enemy2.X += 10;
+                }
+                if (enemy2.state == 2)
+                {
+                    enemy2.iFrame++;
+                    if (enemy2.iFrame > 8)
+                    {
+                        enemy2.iFrame = 0;
+                    }
+                    if (enemy2.X < 500)
+                    {
+                        enemy2.state = 0;
+
+                    }
+                    enemy2.X -= 10;
+                }
+            }
+        }
+        void CreateLadder()
+        {
+            ladder.img = new Bitmap("Ladders/ladder.png");
+            ladder.y = 450 + wrld.rcSrc.Y;
+            ladder.x = 720 + wrld.rcSrc.X;
+            ladder.W = 200;
+            ladder.H = 220;
+        }
+        void LadderHandle()
+        {
+            int YS = wrld.rcSrc.Y * 19 / 10;
+            int XS = wrld.rcSrc.X * 19 / 10;
+            if ((Eliot.X >= ladder.x - XS && Eliot.X <= ladder.x + ladder.W - XS)
+                && Eliot.Y + Eliot.frames[0].Height - 20 >= ladder.y - YS)
+            {
+                ladderFlag = true;
+
+            }
+            else
+            {
+                ladderFlag = false;
+                y = Eliot.Y;
+            }
+            //Console.WriteLine((Eliot.Y + Eliot.frames[0].Height-20).ToString() + "," + (ladder.y-YS).ToString());
+        }
         void Create_Bomb()
         {
             CMultiImgActor pnn = new CMultiImgActor();
@@ -751,9 +1113,7 @@ namespace project
         }
         void movegun()
         {
-            if (Eliot.Y > 0 && Eliot.Y +15< this.Height)
-            {
-                switch (igun)
+             switch (igun)
                 {
                     case 0:
                         gun[0].x = Eliot.X + Eliot.frames[0].Width - 17;
@@ -765,7 +1125,7 @@ namespace project
                 }
             
                 gun[igun].y = Eliot.Y + 15;
-            }
+            
         }
         void create_laser()
         {
@@ -1145,8 +1505,11 @@ namespace project
         {
             if (Eliot.HP >= 0 && cttickDMG <4)
             {
+                int XS = wrld.rcSrc.X * 19 / 10;
+                int YS = wrld.rcSrc.Y * 19 / 10;
                 g.Clear(Color.White);
                 g.DrawImage(wrld.wrld, wrld.rcDst, wrld.rcSrc, GraphicsUnit.Pixel);
+                g.DrawImage(ladder.img, ladder.x - XS, ladder.y - YS, ladder.W, ladder.H);
                 if (Eliot.HP == 0)
                 {
                     g.DrawImage(Eliot.frames[Eliot.frames.Count - 1], Eliot.X, Eliot.Y + Eliot.frames[0].Height / 2);
@@ -1157,8 +1520,7 @@ namespace project
                     g.DrawImage(Eliot.frames[Eliot.iFrame], Eliot.X, Eliot.Y);
                     g.DrawImage(gun[igun].img, gun[igun].x, gun[igun].y, 50, 50);
                 }
-                int XS = wrld.rcSrc.X * 19 / 10;
-                int YS = wrld.rcSrc.Y * 19 / 10;
+              
                 for (int i = 0; i < bullets.Count; i++)
                 {
                     g.DrawImage(bullets[i].img, bullets[i].x, bullets[i].y, 50, 50);
@@ -1191,9 +1553,10 @@ namespace project
 
                     g.DrawImage(bomb[i].frames[bomb[i].iFrame], bomb[i].X - XS, bomb[i].Y - YS, 70, 70);
                 }
+                g.DrawImage(Boss.frames[Boss.iFrame], Boss.X-XS, Boss.Y-YS, Boss.W, Boss.H);
                 g.DrawImage(Elevator.img, Elevator.x - XS, Elevator.y - YS, Elevator.W, Elevator.H);
                 g.DrawImage(HP.frames[Eliot.HP], HP.X, HP.Y);
-               
+                g.DrawImage(enemy2.frames[enemy2.iFrame],enemy2.X-XS,enemy2.Y-YS,enemy2.W,enemy2.H);
             }
             else if(cttickDMG==4)
             {
